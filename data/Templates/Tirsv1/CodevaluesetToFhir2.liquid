@@ -1,0 +1,66 @@
+{% assign CodeValueSystemBKI = 'http://bki.skane.se/sdv-millennium/id/codevalueset/23069' -%}
+{% assign question1 = 'resource?puri=' | append: CodeValueSystemBKI -%}
+{% assign CodeValueSetSourceResponse = 'https://tirs.skane.se/api/v2.0/' | tirs_client: question1 %}
+
+
+{% assign CodeValueSetSource = CodeValueSetSourceResponse.items | first %}
+
+{% assign opOnt = CodeValueSetSource.mainResource.resourceReferences[0].objectPropertyUri | %}
+{% assign question2 = 'resource/$resolve?puri=' | append: CodeValueSystemBKI | append: '&objprop=' | append: opOnt | append: '&pagesize=1000' %}
+{% assign CodeValueSourceResponse = 'https://tirs.skane.se/api/v2.0/' | tirs_client: question2 %}
+{% assign CodeSystemTest = 'https://r4.ontoserver.csiro.au/fhir' | fhir_terminology_client: 'CodeSystem/b733da4d-238f-4f69-a821-d34bd8d26017' %}
+
+{% assign CodeValueSource = CodeValueSourceResponse.items %}
+
+{% assign systemUri = CodeValueSetSource.mainResource.classOntologyUri | sektor_bki %}
+{% assign code = CodeValueSetSource.mainResource.classOntologyUri | bki_koncept %}
+{
+  "resourceType": "{{CodeSystemTest.resourceType}}",
+  "status": "active",
+  "content": "complete",
+  "name" :  "{{ CodeValueSetSource.mainResource.dataProperties | where: 'name', 'display' | map: 'value' | first | strip }}",
+  "title" :  "{{ CodeValueSetSource.mainResource.dataProperties | where: 'name', 'display' | map: 'value' | first | strip }}",
+  "description":  "{{ CodeValueSetSource.mainResource.dataProperties | where: 'name', 'description' | map: 'value' | first | strip  }}",
+  "url": "{{CodeValueSetSource.mainResource.uri }}",
+  "identifier": [
+    {
+        "type": {
+            "coding": [
+                {
+                  "system": "{{ systemUri }}",
+                  "code": "{{ code }}"
+                }
+              ]
+        },        
+        "system": "http://bki.skane.se/sdv-millennium/id/codevalueset",
+        "value": "{{ CodeValueSetSource.mainResource.dataProperties | where: 'name', 'codeValueSet' | map: 'value' | first }}",
+    }
+  ],
+  "active": "true",
+  
+  "property": [
+    {% assign firstConceptSource = CodeValueSource | first %}
+    {% for prop in firstConceptSource.mainResource.dataProperties %}
+    {
+      "code": "{{ prop.name }}"
+    }{% if forloop.last == false %},{% endif %}
+    {% endfor %}
+  ],
+  "concept": [
+    {% for resource in CodeValueSource %}
+    {
+      "code": "{{ resource.mainResource.dataProperties | where: 'name', 'codeValue' | map: 'value' | first }}",
+      "display": "{{ resource.mainResource.dataProperties | where: 'name', 'display' | map: 'value' | first }}",
+      "definition": "{{ resource.mainResource.dataProperties | where: 'name', 'definition' | map: 'value' | first }}",
+      "property": [
+        {% for prop in resource.mainResource.dataProperties %}
+        {
+          "code": "{{ prop.name }}",
+          "valueString": "{{ prop.value }}"
+        }{% if forloop.last == false %},{% endif %}
+        {% endfor %}
+      ]
+    }{% if forloop.last == false %},{% endif %}
+    {% endfor %}
+  ]
+}

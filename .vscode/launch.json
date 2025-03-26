@@ -1,0 +1,12 @@
+{
+    "name": ".NET Core Test",
+    "type": "coreclr",
+    "request": "launch",
+    "preLaunchTask": "build",
+    "program": "${workspaceFolder}/bin/Debug/netcoreapp3.1/MyTestProject.dll",
+    "args": [],
+    "cwd": "${workspaceFolder}",
+    "console": "internalConsole",
+    "stopAtEntry": false,
+    "justMyCode": true
+}

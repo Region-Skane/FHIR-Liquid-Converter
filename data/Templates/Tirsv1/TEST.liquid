@@ -1,0 +1,27 @@
+{% assign data = msg.data | first %}
+{% assign systemUri = data.mainResource.classOntologyUri | sektor_bki %}
+{% assign code = data.mainResource.classOntologyUri | bki_koncept %}
+{
+  "resourceType": "CodeSystem",
+  "status": "active",
+  "content": "complete",
+  "name" :  "{{ data.mainResource.dataProperties | where: 'name', 'display' | map: 'value' | first }}",
+  "title" :  "{{ data.mainResource.dataProperties | where: 'name', 'display' | map: 'value' | first | strip }}",
+  "description":  "{{ data.mainResource.dataProperties | where: 'name', 'description' | map: 'value' | first | strip  }}",
+  "url": "{{ data.mainResource.uri }}",
+  "identifier": [
+    {
+        "type": {
+            "coding": [
+                {
+                  "system": "{{ systemUri }}",
+                  "code": "{{ code }}"
+                }
+              ]
+        },        
+        "system": "http://bki.skane.se/sdv-millennium/id/codevalueset",
+        "value": "{{ data.mainResource.dataProperties | where: 'name', 'codeValueSet' | map: 'value' | first }}",
+    }
+  ],
+  "active": true,
+}

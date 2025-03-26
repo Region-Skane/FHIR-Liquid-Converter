@@ -5,9 +5,10 @@
 
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Threading;
 using DotLiquid;
-using EnsureThat;
+using DotLiquid.Exceptions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Health.Fhir.Liquid.Converter.Extensions;
 using Microsoft.Health.Fhir.Liquid.Converter.Models;
@@ -19,19 +20,13 @@ using NJsonSchema;
 
 namespace Microsoft.Health.Fhir.Liquid.Converter.Processors
 {
-    public class JsonProcessor : BaseProcessor
+    public class TirsProcessor : JsonProcessor
     {
-        private readonly IDataParser _parser;
+        private readonly IDataParser _parser = new JsonDataParser();
 
-        public JsonProcessor(ProcessorSettings processorSettings, ILogger<JsonProcessor> logger)
-            : this(processorSettings, new JsonDataParser(), logger)
-        {
-        }
-
-        public JsonProcessor(ProcessorSettings processorSettings, IDataParser parser, ILogger<JsonProcessor> logger)
+        public TirsProcessor(ProcessorSettings processorSettings, ILogger<TirsProcessor> logger)
             : base(processorSettings, logger)
         {
-            _parser = EnsureArg.IsNotNull(parser, nameof(parser));
         }
 
         protected override string InternalConvert(string data, string rootTemplate, ITemplateProvider templateProvider, TraceInfo traceInfo = null)
@@ -46,9 +41,17 @@ namespace Microsoft.Health.Fhir.Liquid.Converter.Processors
             return InternalConvertFromObject(jsonData, rootTemplate, templateProvider, traceInfo);
         }
 
-        public string Convert(JObject data, string rootTemplate, ITemplateProvider templateProvider, TraceInfo traceInfo = null)
+        public string Convert(Dictionary<string, JObject> data, string rootTemplate, ITemplateProvider templateProvider, TraceInfo traceInfo = null)
         {
-            var jsonData = data.ToObject();
+
+            JObject concatData = new JObject();  // Skapa ett nytt JObject för att hålla resultatet
+
+            foreach (var kvp in data)  // Iterera genom varje par i ordboken
+            {
+                concatData[kvp.Key] = kvp.Value;  // Lägg till varje JObject med sin associerade nyckel i resultat-JObject
+            }
+
+            var jsonData = concatData.ToObject();
             return InternalConvertFromObject(jsonData, rootTemplate, templateProvider, traceInfo);
         }
 

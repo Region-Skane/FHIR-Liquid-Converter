@@ -1,6 +1,6 @@
 {
     "resourceType": "Patient",
-    "id": "{{ msg.PatientId | to_json_string | generate_uuid }}",
+    "id": "{{ msg.PatientId  | to_json_string | generate_uuid  }}",
     "identifier": [
         {
             "use": "usual",

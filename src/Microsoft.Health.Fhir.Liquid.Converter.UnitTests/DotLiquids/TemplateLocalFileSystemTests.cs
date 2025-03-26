@@ -32,6 +32,18 @@ namespace Microsoft.Health.Fhir.Liquid.Converter.UnitTests.DotLiquids
         }
 
         [Fact]
+        public void GivenAValidTemplateDirectory_WhenGetTemplate_CorrectResultsShouldBeReturned_OLOF()
+        {
+            var templateLocalFileSystem = new TemplateLocalFileSystem(TestConstants.JsonTemplateDirectory, DataType.Json);
+
+            // Template exists
+            Assert.NotNull(templateLocalFileSystem.GetTemplate("template"));
+
+            // Template does not exist
+            Assert.Null(templateLocalFileSystem.GetTemplate("Foo"));
+        }
+
+        [Fact]
         public void GivenAValidTemplateDirectory_WhenGetTemplateWithContext_CorrectResultsShouldBeReturned()
         {
             var templateLocalFileSystem = new TemplateLocalFileSystem(TestConstants.Hl7v2TemplateDirectory, DataType.Hl7v2);

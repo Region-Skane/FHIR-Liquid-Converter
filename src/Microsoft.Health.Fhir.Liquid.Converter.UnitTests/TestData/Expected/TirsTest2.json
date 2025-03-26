@@ -1,0 +1,133 @@
+﻿{
+  "resourceType": "CodeSystem",
+  "status": "active",
+  "content": "complete",
+  "name": "Allergikost",
+  "title": "Allergikost",
+  "description": "Allergikost",
+  "url": "http://bki.skane.se/sdv-millennium/id/codevalueset/100532",
+  "identifier": [
+    {
+      "type": {
+        "coding": [
+          {
+            "system": "http://bki.skane.se/sdv-millennium",
+            "code": "codevalueset"
+          }
+        ]
+      },
+      "system": "http://bki.skane.se/sdv-millennium/id/codevalueset",
+      "value": "100532"
+    }
+  ],
+  "active": true,
+  "property": [
+    {
+      "code": "description"
+    },
+    {
+      "code": "definition"
+    },
+    {
+      "code": "display"
+    },
+    {
+      "code": "cdfMeaning"
+    },
+    {
+      "code": "codeValue"
+    },
+    {
+      "code": "conceptCki"
+    }
+  ],
+  "concept": [
+    {
+      "code": "2577240663",
+      "display": "Annat (ange i särskilda anpassningar)",
+      "definition": "Annat (ange i särskilda anpassningar)",
+      "property": [
+        {
+          "code": "description",
+          "valueString": "Annat (ange i särskilda anpassningar)"
+        },
+        {
+          "code": "definition",
+          "valueString": "Annat (ange i särskilda anpassningar)"
+        },
+        {
+          "code": "display",
+          "valueString": "Annat (ange i särskilda anpassningar)"
+        },
+        {
+          "code": "cdfMeaning"
+        },
+        {
+          "code": "codeValue",
+          "valueString": "2577240663"
+        },
+        {
+          "code": "conceptCki"
+        }
+      ]
+    },
+    {
+      "code": "2577240603",
+      "display": "Fisk",
+      "definition": "Fisk",
+      "property": [
+        {
+          "code": "description",
+          "valueString": "Fisk"
+        },
+        {
+          "code": "definition",
+          "valueString": "Fisk"
+        },
+        {
+          "code": "display",
+          "valueString": "Fisk"
+        },
+        {
+          "code": "cdfMeaning"
+        },
+        {
+          "code": "codeValue",
+          "valueString": "2577240603"
+        },
+        {
+          "code": "conceptCki"
+        }
+      ]
+    },
+    {
+      "code": "2577240657",
+      "display": "Lupin",
+      "definition": "Lupin",
+      "property": [
+        {
+          "code": "description",
+          "valueString": "Lupin"
+        },
+        {
+          "code": "display",
+          "valueString": "Lupin"
+        },
+        {
+          "code": "definition",
+          "valueString": "Lupin"
+        },
+        {
+          "code": "cdfMeaning"
+        },
+        {
+          "code": "codeValue",
+          "valueString": "2577240657"
+        },
+        {
+          "code": "conceptCki"
+        }
+      ]
+    }
+  ]
+}

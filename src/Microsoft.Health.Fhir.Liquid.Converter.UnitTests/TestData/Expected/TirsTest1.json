@@ -1,0 +1,24 @@
+﻿{
+  "resourceType": "CodeSystem",
+  "status": "active",
+  "content": "complete",
+  "name": "Allergikost",
+  "title": "Allergikost",
+  "description": "Allergikost",
+  "url": "http://bki.skane.se/sdv-millennium/id/codevalueset/100532",
+  "identifier": [
+    {
+      "type": {
+        "coding": [
+          {
+            "system": "http://bki.skane.se/sdv-millennium",
+            "code": "codevalueset"
+          }
+        ]
+      },
+      "system": "http://bki.skane.se/sdv-millennium/id/codevalueset",
+      "value": "100532"
+    }
+  ],
+  "active": true
+}

@@ -17,6 +17,7 @@ using Microsoft.Health.Fhir.Liquid.Converter.Utilities;
 using Microsoft.Health.MeasurementUtility;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using ServiceWell.Health.Fhir.Liquid.Converter;
 
 namespace Microsoft.Health.Fhir.Liquid.Converter.Processors
 {
@@ -78,6 +79,7 @@ namespace Microsoft.Health.Fhir.Liquid.Converter.Processors
 
             // Load filters
             context.AddFilters(typeof(Filters));
+            context.AddFilters(typeof(FlcFilters));
 
             // Add root template's parent path to context.
             AddRootTemplatePathScope(context, templateProvider, rootTemplate);

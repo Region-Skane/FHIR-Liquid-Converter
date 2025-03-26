@@ -1,0 +1,11 @@
+{% if ITEM.mainResource %}
+{
+    "ontologyUrl": "{{ITEM.mainResource.classOntologyUri}}",
+    "resourceUri": "{{ITEM.mainResource.uri}}",
+      {% assign code = ITEM.mainResource.classOntologyUri %}
+      {% for prop in ITEM.mainResource.dataProperties %}
+        "{{ prop.name }}": "{{ prop.value }}"
+        {% unless forloop.last %},{% endunless %}
+    {% endfor %}
+}
+{% endif %}
