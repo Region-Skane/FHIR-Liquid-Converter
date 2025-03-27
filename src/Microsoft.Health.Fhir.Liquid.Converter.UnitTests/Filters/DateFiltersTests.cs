@@ -5,6 +5,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using Microsoft.Health.Fhir.Liquid.Converter.Exceptions;
 using Microsoft.Health.Fhir.Liquid.Converter.Models;
 using Xunit;
@@ -367,12 +368,14 @@ namespace Microsoft.Health.Fhir.Liquid.Converter.UnitTests.FilterTests
 
             // Standard DateTime format, "d" stands for short day pattern
             var nowWithStandardFormat = Filters.Now(string.Empty, "d");
-            Assert.Contains("/", nowWithStandardFormat);
+            var expectedFormat = DateTime.UtcNow.ToString("d", CultureInfo.CurrentCulture); // short day pattern in culture specific format
+            Assert.Equal(expectedFormat, nowWithStandardFormat);
 
-            // Customized DateTime format
-            var days = new List<string> { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" };
-            var nowWithCustomizedFormat = Filters.Now(string.Empty, "dddd, dd MMMM yyyy HH:mm:ss");
-            Assert.Contains(days, day => nowWithCustomizedFormat.StartsWith(day));
+            var format = "dddd, dd MMMM yyyy HH:mm:ss";
+            var currentCultureNow = DateTime.UtcNow.ToString(format, CultureInfo.CurrentCulture);
+            var nowWithCustomizedFormat = Filters.Now(string.Empty, format);
+
+            Assert.Equal(currentCultureNow, nowWithCustomizedFormat);
 
             // Null and empty format will lead to default format, which is short day with long time
             dateTime = DateTime.Parse(Filters.Now(string.Empty, null));

@@ -14,6 +14,9 @@ namespace Microsoft.Health.Fhir.Liquid.Converter.Processors
             : base(processorSettings, logger)
         {
         }
+
+        protected override DefaultRootTemplateParentPath DefaultRootTemplateParentPath { get; set; } = DefaultRootTemplateParentPath.Fhir;
+
         protected override string InternalConvert(string data, string rootTemplate, ITemplateProvider templateProvider, TraceInfo traceInfo = null)
         {
             // TO DO For FHIR Specific Logic

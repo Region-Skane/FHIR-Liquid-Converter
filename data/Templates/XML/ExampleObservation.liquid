@@ -1,0 +1,58 @@
+{
+  "resourceType": "Observation",
+  "id": "{{ msg.Id }}",
+  "status": "{{ msg.Status }}",
+  "code": {
+    "coding": [
+      {
+        "system": "{{ msg.Code.Coding.System }}",
+        "code": "{{ msg.Code.Coding.Code }}",
+        "display": "{{ msg.Code.Coding.Display }}"
+      }
+    ]
+  },
+  "subject": {
+    "reference": "{{ msg.Subject.Reference }}",
+    "display": "{{ msg.Subject.Display }}"
+  },
+  "effectiveDateTime": "{{ msg.Effective.DateTime }}",
+  "valueQuantity": {
+    "value": {{ msg.ValueQuantity.Value }},
+    "unit": "{{ msg.ValueQuantity.Unit }}",
+    "system": "{{ msg.ValueQuantity.System }}",
+    "code": "{{ msg.ValueQuantity.Code }}"
+  },
+  "interpretation": [
+    {
+      "coding": [
+        {
+          "system": "{{ msg.Interpretation.Coding.System }}",
+          "code": "{{ msg.Interpretation.Coding.Code }}",
+          "display": "{{ msg.Interpretation.Coding.Display }}"
+        }
+      ]
+    }
+  ],
+  "component": [
+    {% for component in msg.Component %}
+    {
+      "code": {
+        "coding": [
+          {
+            "system": "{{ component.Code.Coding.System }}",
+            "code": "{{ component.Code.Coding.Code }}",
+            "display": "{{ component.Code.Coding.Display }}"
+          }
+        ]
+      },
+      "valueQuantity": {
+        "value": {{ component.ValueQuantity.Value }},
+        "unit": "{{ component.ValueQuantity.Unit }}",
+        "system": "{{ component.ValueQuantity.System }}",
+        "code": "{{ component.ValueQuantity.Code }}"
+      }
+    }
+    {% if forloop.last == false %},{% endif %}
+    {% endfor %}
+  ]
+}

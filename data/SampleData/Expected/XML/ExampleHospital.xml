@@ -1,0 +1,35 @@
+<Hospital>
+  <Department>
+    <Name>Neurology</Name>
+    <Patients>
+      <Patient>
+        <Id>789</Id>
+        <PersonalInfo>
+          <FirstName>Alice</FirstName>
+          <LastName>Brown</LastName>
+          <BirthDate>1990-07-15</BirthDate>
+          <Gender>F</Gender>
+        </PersonalInfo>
+        <Contact>
+          <Phone type="work">555-9876</Phone>
+          <Email>alice.brown@example.com</Email>
+        </Contact>
+        <MedicalRecords>
+          <Allergies>
+            <Allergy>
+              <Substance>Peanuts</Substance>
+              <Reaction>Anaphylaxis</Reaction>
+            </Allergy>
+          </Allergies>
+          <Medications>
+            <Medication>
+              <Name>Ibuprofen</Name>
+              <Dosage>200mg</Dosage>
+              <Frequency>As needed</Frequency>
+            </Medication>
+          </Medications>
+        </MedicalRecords>
+      </Patient>
+    </Patients>
+  </Department>
+</Hospital>

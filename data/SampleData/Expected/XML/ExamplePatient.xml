@@ -1,0 +1,29 @@
+{
+  "resourceType": "MedicationRequest",
+  "id": "12345",
+  "status": "active",
+  "intent": "order",
+  "medicationCodeableConcept": {
+    "coding": [
+      {
+        "code": "123456",
+        "display": "Aspirin"
+      }
+    ]
+  },
+  "subject": {
+    "reference": "Patient/789",
+    "display": "Alice Brown"
+  },
+  "authoredOn": "2024-12-01",
+  "dosageInstruction": [
+    {
+      "text": "Take one tablet daily",
+      "timing": {
+        "code": {
+          "text": "Once per day"
+        }
+      }
+    }
+  ]
+}

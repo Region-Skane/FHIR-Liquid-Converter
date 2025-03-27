@@ -15,5 +15,8 @@ namespace Microsoft.Health.Fhir.Liquid.Converter.Models
 
         // Enable the Telemetry Logger in the processor.
         public bool EnableTelemetryLogger { get; set; } = false;
+
+        // Allow output validation errors, ie bad json. Will return the raw output.
+        public bool AllowOutputValidationErrors { get; set; } = false;
     }
 }

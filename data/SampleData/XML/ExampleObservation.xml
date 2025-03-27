@@ -1,0 +1,61 @@
+<Observation>
+  <Id>67890</Id>
+  <Status>final</Status>
+  <Code>
+    <Coding>
+      <System>http://loinc.org</System>
+      <Code>29463-7</Code>
+      <Display>Body weight</Display>
+    </Coding>
+  </Code>
+  <Subject>
+    <Reference>Patient/123</Reference>
+    <Display>John Doe</Display>
+  </Subject>
+  <Effective>
+    <DateTime>2024-12-03T10:00:00Z</DateTime>
+  </Effective>
+  <ValueQuantity>
+    <Value>72.5</Value>
+    <Unit>kg</Unit>
+    <System>http://unitsofmeasure.org</System>
+    <Code>kg</Code>
+  </ValueQuantity>
+  <Interpretation>
+    <Coding>
+      <System>http://terminology.hl7.org/CodeSystem/v3-ObservationInterpretation</System>
+      <Code>N</Code>
+      <Display>Normal</Display>
+    </Coding>
+  </Interpretation>
+  <Component>
+    <Code>
+      <Coding>
+        <System>http://loinc.org</System>
+        <Code>8302-2</Code>
+        <Display>Body height</Display>
+      </Coding>
+    </Code>
+    <ValueQuantity>
+      <Value>180.0</Value>
+      <Unit>cm</Unit>
+      <System>http://unitsofmeasure.org</System>
+      <Code>cm</Code>
+    </ValueQuantity>
+  </Component>
+  <Component>
+    <Code>
+      <Coding>
+        <System>http://loinc.org</System>
+        <Code>39156-5</Code>
+        <Display>Body mass index (BMI)</Display>
+      </Coding>
+    </Code>
+    <ValueQuantity>
+      <Value>22.4</Value>
+      <Unit>kg/m2</Unit>
+      <System>http://unitsofmeasure.org</System>
+      <Code>kg/m2</Code>
+    </ValueQuantity>
+  </Component>
+</Observation>

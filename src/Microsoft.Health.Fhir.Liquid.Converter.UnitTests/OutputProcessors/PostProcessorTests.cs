@@ -173,7 +173,7 @@ namespace Microsoft.Health.Fhir.Liquid.Converter.UnitTests.OutputProcessors
         [MemberData(nameof(GetValidDataForParseJson))]
         public void GivenValidData_WhenParsing_ValidDataShouldBeParsed(string input, string expected)
         {
-            string result = PostProcessor.ParseJson(input).ToString(Formatting.None);
+            string result = PostProcessor.ParseJson(input, allowOutputValidationErrors: false).ToString(Formatting.None);
             Assert.Equal(expected, result);
         }
 
@@ -181,7 +181,7 @@ namespace Microsoft.Health.Fhir.Liquid.Converter.UnitTests.OutputProcessors
         [MemberData(nameof(GetInvalidDataForParseJson))]
         public void GivenInvalidData_WhenParsing_ValidDataShouldBeParsed(string input)
         {
-            var exception = Assert.Throws<PostprocessException>(() => PostProcessor.ParseJson(input));
+            var exception = Assert.Throws<PostprocessException>(() => PostProcessor.ParseJson(input, allowOutputValidationErrors: false));
             Assert.Equal(FhirConverterErrorCode.JsonParsingError, exception.FhirConverterErrorCode);
         }
 

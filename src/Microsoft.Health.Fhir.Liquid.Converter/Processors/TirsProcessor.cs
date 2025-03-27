@@ -43,41 +43,15 @@ namespace Microsoft.Health.Fhir.Liquid.Converter.Processors
 
         public string Convert(Dictionary<string, JObject> data, string rootTemplate, ITemplateProvider templateProvider, TraceInfo traceInfo = null)
         {
-
             JObject concatData = new JObject();  // Skapa ett nytt JObject för att hålla resultatet
 
-            foreach (var kvp in data)  // Iterera genom varje par i ordboken
+            foreach (var kvp in data) // Iterera genom varje par i ordboken
             {
                 concatData[kvp.Key] = kvp.Value;  // Lägg till varje JObject med sin associerade nyckel i resultat-JObject
             }
 
             var jsonData = concatData.ToObject();
             return InternalConvertFromObject(jsonData, rootTemplate, templateProvider, traceInfo);
-        }
-
-        protected override Context CreateContext(ITemplateProvider templateProvider, IDictionary<string, object> data, string rootTemplate)
-        {
-            // Load data and templates
-            var cancellationToken = Settings.TimeOut > 0 ? new CancellationTokenSource(Settings.TimeOut).Token : CancellationToken.None;
-            var context = new JSchemaContext(
-                environments: new List<Hash> { Hash.FromDictionary(data) },
-                outerScope: new Hash(),
-                registers: Hash.FromDictionary(new Dictionary<string, object> { { "file_system", templateProvider.GetTemplateFileSystem() } }),
-                errorsOutputMode: ErrorsOutputMode.Rethrow,
-                maxIterations: Settings.MaxIterations,
-                formatProvider: CultureInfo.InvariantCulture,
-                cancellationToken: cancellationToken)
-            {
-                ValidateSchemas = new List<JsonSchema>(),
-            };
-
-            // Load filters
-            context.AddFilters(typeof(Filters));
-
-            // Add root template's parent path to context.
-            AddRootTemplatePathScope(context, templateProvider, rootTemplate);
-
-            return context;
         }
 
         protected override void CreateTraceInfo(object data, Context context, TraceInfo traceInfo)

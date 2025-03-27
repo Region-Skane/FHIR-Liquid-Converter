@@ -1,0 +1,250 @@
+<Message xsi:schemaLocation="http://www.kith.no/xmlstds/labsvar/2012-02-15 svar-v1.4.xsd" xmlns="http://www.kith.no/xmlstds/labsvar/2012-02-15" xmlns:xsd="http://www.w3.org/2001/XMLSchema.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Type V="SVAR_LAB" DN="Svarrapport-Laboratoriemedisin"/>
+  <MIGversion>v1.4 2012-02-15</MIGversion>
+  <!-- GenDate: reportdatetime -->
+  <GenDate V="2024-10-14T10:32:00"/>
+  <MsgId>dad5a830-f924-450c-a7c6-4e670b143352</MsgId>
+  <ServReport>
+    <!-- ServType_modified: M - Modified report -->
+    <ServType V="M" DN="Endring"/>
+    <!-- IssueDate: sample.createdt -->
+    <IssueDate V="2024-10-14T10:27:00"/>
+    <Status V="F" DN="Endelig rapport"/>
+    <Ack V="J" DN="Avsenderen ønsker bekreftelse"/>
+    <MsgDescr V="CLIN" DN="Klinisk kjemi"/>
+    <!-- ServProvId: The same ID for all reports for a single request. SampleId (sample.s_sampleid) -->
+    <ServProvId>24288000106</ServProvId>
+    <ServReq>
+      <!-- IssueDate: request.createdt The time the request was created -->
+      <IssueDate V="2024-10-14T10:27:00"/>
+      <MsgDescr V="CLIN" DN="Klinisk kjemi"/>
+      <Id>24288000106</Id>
+      <!-- ReceiptDate: sample.receiveddt - The date and time the sample was received -->
+      <ReceiptDate V="2024-10-14T10:29:00"/>
+      <!-- IdByServProvider: sample.s_sampleid - The lab's ID -->
+      <IdByServProvider>24288000106</IdByServProvider>
+      <Comment>
+        <!-- TextResultValue: Request text in -->
+        <TextResultValue>Begärt startdatum: 2024-10-14 10:25:00</TextResultValue>
+      </Comment>
+    </ServReq>
+    <Patient>
+      <Sex V="2" DN="Kvinne"/>
+      <!-- Name: samplepoint.w_lastname Patient name formatted as lastname, firstname -->
+      <Name>Labsson, Halina</Name>
+      <!-- OffId: samplepoint.w_code -->
+      <OffId>19980809-2382</OffId>
+      <TypeOffId V="FNR" DN="Fødselsnummer"/>
+      <Address>
+        <Type V="H" DN="Bostedsadresse"/>
+        <!-- StreetAdr: samplepoint.w_address1 -->
+        <StreetAdr>Höjagatan 5B</StreetAdr>
+        <!-- PostalCode: samplepoint.w_postalcode -->
+        <PostalCode>21141</PostalCode>
+        <!-- City: samplepoint.w_city -->
+        <City>Malmö</City>
+      </Address>
+      <AnalysedSubject>
+        <CollectedSample>
+          <!-- CollectedDate: sampleitems.collectiondt -->
+          <CollectedDate V="2024-10-14T10:26:00"/>
+        </CollectedSample>
+        <!-- Type: sampleitems.materialdesc Material description or, if is empty, the id. In 1.2 always id -->
+        <Type>U-, Urin</Type>
+        <!-- IdByRequester: sampleitems.pid Requesters id for the sampleitem/analysed subject -->
+        <IdByRequester>24288000106A</IdByRequester>
+        <!-- Number: Always 1. Number of sample tubes for this sampleitem/analysed subject. -->
+        <Number>1</Number>
+        <!-- IdByServProvider: sampleitems.w_sampleitemid Laboratory unique id for the sampleitem/analysed subject -->
+        <IdByServProvider>24288000106-001</IdByServProvider>
+      </AnalysedSubject>
+      <!--
+        Reportgroup_start: Rapportgrupp för Urin/Dialysvätskor
+        Reportgroups are always used like in KiTH mikro 1.3 case 7 since every defined test in Medical Suite belongs to a reportgroup.
+        It is the reportgroup that will be medical validated and part answering always goes within a reportgroup.
+        There may be one or more tests (including investigations) belonging to the same reportgroup.
+        There may be one or more reportgroups in an answer report.
+        Antibiotics will be reported outside reportgroups with references to the identification resultitem.
+        Reportgroups are the only ResultItem element that doesn't have the element Investigation.
+      -->
+      <ResultItem>
+        <TextResult>
+          <Heading V="GR" DN="Gruppe"/>
+          <!-- TextResultValue: reportgroup.reportgroupdesc Report group header text -->
+          <TextResultValue>Rapportgrupp för Urin/Dialysvätskor</TextResultValue>
+        </TextResult>
+        <!--
+          Test_start: U-KREA
+        -->
+        <ResultItem>
+          <NumResult>
+            <!-- NumResultValue: numresult - Comes from tests.displayvalue but without the lt or gt char -->
+            <NumResultValue V="58.0" U="mmol/L"/>
+          </NumResult>
+          <!-- ServType: Result is unchanged since first report -->
+          <ServType V="H" DN="Historikk"/>
+          <Investigation>
+            <!-- Id: 7280 : External code defined for the test -->
+            <Id V="NPU09102" S="2.16.578.1.12.4.1.1.7280" DN="U-Kreatinin "/>
+            <!-- Id: Local id and name -->
+            <Id V="U-KREA" S="2.16.578.1.12.4.1.1.8212" OT="U-Kreatinin "/>
+            <!-- Spec: Workitem idbyrequester (orderid) -->
+            <Spec V="560444801" S="2.16.578.1.12.4.1.1.9999"/>
+          </Investigation>
+          <InvDate V="2024-10-14T10:30:00"/>         
+          <!-- StatusInvestigation: Result -->
+          <StatusInvestigation V="3" DN="Endelig"/>
+          <!-- refAnalysedSubject: sampleitems.w_sampleitemid A reference to the analysed subject -->
+          <RefAnalysedSubject>24288000106-001</RefAnalysedSubject>
+          <Accredited V="true"/>
+        <!-- Test_end: U-KREA -->
+        </ResultItem>
+      <!-- Reportgroup_end: Rapportgrupp för Urin/Dialysvätskor -->
+      </ResultItem>
+      <!--
+        Reportgroup_start: Rapportgrupp för Amfetaminer
+        Reportgroups are always used like in KiTH mikro 1.3 case 7 since every defined test in Medical Suite belongs to a reportgroup.
+        It is the reportgroup that will be medical validated and part answering always goes within a reportgroup.
+        There may be one or more tests (including investigations) belonging to the same reportgroup.
+        There may be one or more reportgroups in an answer report.
+        Antibiotics will be reported outside reportgroups with references to the identification resultitem.
+        Reportgroups are the only ResultItem element that doesn't have the element Investigation.
+      -->
+      <ResultItem>
+        <TextResult>
+          <Heading V="GR" DN="Gruppe"/>
+          <!-- TextResultValue: reportgroup.reportgroupdesc Report group header text -->
+          <TextResultValue>Rapportgrupp för Amfetaminer</TextResultValue>
+        </TextResult>
+        <!--
+          Test_start: U-AMF-SCREEN
+        -->
+        <ResultItem>
+          <TextResult>
+            <Heading V="LR" DN="Laboratorieresultat"/>
+            <!-- TextResultValue: tests.displayvalue or tests.w_tresult Formatted text result -->
+            <TextResultValue>POS</TextResultValue>
+            <Unit>µg/L</Unit>
+          </TextResult>
+          <!-- ServType: Result is new or unchanged -->
+          <ServType V="N" DN="Ny"/>
+          <RefInterval>
+            <!-- Descr: normrefrange_row Reference range -->
+            <Descr>NEG</Descr>
+          </RefInterval>
+          <Investigation>
+            <!-- Id: 7280 : External code defined for the test -->
+            <Id V="NPU08960" S="2.16.578.1.12.4.1.1.7280" DN="U-Amfetamin(screen) "/>
+            <!-- Id: Local id and name -->
+            <Id V="U-AMF-SCREEN" S="2.16.578.1.12.4.1.1.8212" OT="U-Amfetamin(screen) "/>
+            <!-- Spec: Workitem idbyrequester (orderid) -->
+            <Spec V="560444801" S="2.16.578.1.12.4.1.1.9999"/>
+          </Investigation>
+          <InvDate V="2024-10-14T10:30:00"/>         
+          <!-- Comment: Test comment -->
+          <Comment>Gränsvärde 500 µg/L.
+Omfattar amfetamin, metamfetamin och ecstacy.</Comment>
+          <!-- StatusInvestigation: Result -->
+          <StatusInvestigation V="3" DN="Endelig"/>
+          <!-- refAnalysedSubject: sampleitems.w_sampleitemid A reference to the analysed subject -->
+          <RefAnalysedSubject>24288000106-001</RefAnalysedSubject>
+          <Accredited V="true"/>
+        <!-- Test_end: U-AMF-SCREEN -->
+        </ResultItem>
+        <!--
+          Test_start: U-AMF-VERIF
+        -->
+        <ResultItem>
+          <TextResult>
+            <Heading V="LR" DN="Laboratorieresultat"/>
+            <!-- TextResultValue: tests.displayvalue or tests.w_tresult Formatted text result -->
+            <TextResultValue>POS</TextResultValue>
+            <Unit>µg/L</Unit>
+          </TextResult>
+          <!-- ServType: Result is new or unchanged -->
+          <ServType V="N" DN="Ny"/>
+          <RefInterval>
+            <!-- Descr: normrefrange_row Reference range -->
+            <Descr>NEG</Descr>
+          </RefInterval>
+          <Investigation>
+            <!-- Id: 7280 : External code defined for the test -->
+            <Id V="SWE05173" S="2.16.578.1.12.4.1.1.7280" DN="U-Amfetaminer(verif) "/>
+            <!-- Id: Local id and name -->
+            <Id V="U-AMF-VERIF" S="2.16.578.1.12.4.1.1.8212" OT="U-Amfetaminer(verif) "/>
+            <!-- Spec: Workitem idbyrequester (orderid) -->
+            <Spec V="560444801" S="2.16.578.1.12.4.1.1.9999"/>
+          </Investigation>
+          <InvDate V="2024-10-14T10:31:00"/>         
+          <!-- Comment: Test comment -->
+          <Comment>Amfetamin påvisat vid verifiering.
+ Gränsvärde 200 µg/L.</Comment>
+          <!-- StatusInvestigation: Result -->
+          <StatusInvestigation V="3" DN="Endelig"/>
+          <!-- refAnalysedSubject: sampleitems.w_sampleitemid A reference to the analysed subject -->
+          <RefAnalysedSubject>24288000106-001</RefAnalysedSubject>
+          <Accredited V="true"/>
+        <!-- Test_end: U-AMF-VERIF -->
+        </ResultItem>
+      <!-- Reportgroup_end: Rapportgrupp för Amfetaminer -->
+      </ResultItem>
+    </Patient>
+    <ServProvider>
+      <HCP>
+        <!-- Inst:
+          Department (Dept) is the answerto for Requester element, the laboratory for ServProvider element.
+          Institution (Inst) is given by the field w_ediorganizationid for the answerto or laboratory in customer table.
+          If the department (answerto) points to itself in customer table (w_ediorganizationid = w_customerid), then the department element (Dept) is left out.
+        -->
+        <Inst>
+          <!-- Name: rpt_name - reportname, if empty the name, if empty w_customerid -->
+          <Name>Klinisk kemi, Lund</Name>
+          <!-- Id: rpt_edicode - edicode or if empty, w_customerid -->
+          <Id>LUKENN</Id>
+          <TypeId V="" DN=""/>
+        </Inst>
+      </HCP>
+    </ServProvider>
+    <Requester>
+      <Role V="REQ" DN="Rekvirent"/>
+      <ComMethod V="EDI" DN="EDI"/>
+      <HCP>
+        <!-- Inst:
+          Department (Dept) is the answerto for Requester element, the laboratory for ServProvider element.
+          Institution (Inst) is given by the field w_ediorganizationid for the answerto or laboratory in customer table.
+          If the department (answerto) points to itself in customer table (w_ediorganizationid = w_customerid), then the department element (Dept) is left out.
+        -->
+        <Inst>
+          <!-- Name: rpt_name - reportname, if empty the name, if empty w_customerid -->
+          <Name>Barn- och Ungdomsmottagning Ystad</Name>
+          <!-- Id: rpt_edicode - edicode or if empty, w_customerid -->
+          <Id>YSBAUM</Id>
+          <TypeId V="" DN=""/>
+          <HCPerson>
+            <!-- Name: attention text from sample/copyto -->
+            <Name>959159</Name>
+          </HCPerson>
+        </Inst>
+      </HCP>
+    </Requester>
+    <PaymentResponsible>
+      <TypeGuarantor>Betalingsansvarlig</TypeGuarantor>
+      <HCP>
+        <!-- Inst:
+          Department (Dept) is the answerto for Requester element, the laboratory for ServProvider element.
+          Institution (Inst) is given by the field w_ediorganizationid for the answerto or laboratory in customer table.
+          If the department (answerto) points to itself in customer table (w_ediorganizationid = w_customerid), then the department element (Dept) is left out.
+        -->
+        <Inst>
+          <!-- Name: rpt_name - reportname, if empty the name, if empty w_customerid -->
+          <Name>Barn- och Ungdomsmottagning Ystad</Name>
+          <!-- Id: rpt_edicode - edicode or if empty, w_customerid -->
+          <Id>YSBAUM</Id>
+          <TypeId V="" DN=""/>
+        </Inst>
+      </HCP>
+    </PaymentResponsible>    
+  </ServReport>
+</Message>
+
+   

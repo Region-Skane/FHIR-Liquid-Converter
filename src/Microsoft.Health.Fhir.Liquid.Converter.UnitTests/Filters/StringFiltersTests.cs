@@ -5,6 +5,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using Xunit;
 
 namespace Microsoft.Health.Fhir.Liquid.Converter.UnitTests.FilterTests
@@ -16,7 +17,7 @@ namespace Microsoft.Health.Fhir.Liquid.Converter.UnitTests.FilterTests
         {
             Assert.Equal(0, Filters.ToDouble("0"));
             Assert.Equal(1000, Filters.ToDouble("1000"));
-            Assert.Equal(50.05, Filters.ToDouble("50.05"));
+            Assert.Equal(50.05, Filters.ToDouble(50.05.ToString(CultureInfo.CurrentCulture)));
 
             Assert.Throws<FormatException>(() => Filters.ToDouble("invalid"));
             Assert.Throws<ArgumentNullException>(() => Filters.ToDouble(null));

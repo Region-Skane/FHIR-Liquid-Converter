@@ -1,0 +1,137 @@
+{
+  "resourceType": "Patient",
+  "id": "{{ msg.PatientId }}",
+  "text": {
+    "status": "{{ msg.Summary.Status }}",
+    "div": "{{ msg.Summary.Description.HTML | cdata_escape }}"
+  },
+  "identifier": [
+    {% for identifier in msg.Identifiers.Identifier %}
+    {
+      "use": "{{ identifier.Use }}",
+      "type": {
+        "coding": [
+          {
+            "system": "{{ identifier.Type.System }}",
+            "code": "{{ identifier.Type.Code }}"
+          }
+        ]
+      },
+      "system": "{{ identifier.System }}",
+      "value": "{{ identifier.Value }}",
+      "period": {
+        "start": "{{ identifier.Period.Start }}"
+      },
+      "assigner": {
+        "display": "{{ identifier.Assigner }}"
+      }
+    }
+    {% if forloop.last == false %},{% endif %}
+    {% endfor %}
+  ],
+  "active": {{ msg.Active | downcase }},
+  "name": [
+    {% for name in msg.Names.Name %}
+    {
+      "use": "{{ name.Use }}",
+      "family": "{{ name.Family }}",
+      "given": [
+        {% for given in name.Given %}"{{ given }}"{% if forloop.last == false %},{% endif %}{% endfor %}
+      ]
+      {% if name.Period %}
+      ,"period": {
+        "end": "{{ name.Period.End }}"
+      }
+      {% endif %}
+    }
+    {% if forloop.last == false %},{% endif %}
+    {% endfor %}
+  ],
+  "telecom": [
+    {% for telecom in msg.Telecoms.Telecom %}
+    {
+      {% if telecom.System %}"system": "{{ telecom.System }}",{% endif %}
+      "value": "{{ telecom.Value }}",
+      "use": "{{ telecom.Use }}",
+      {% if telecom.Rank %}"rank": {{ telecom.Rank }},{% endif %}
+      {% if telecom.Period %}
+      "period": {
+        "end": "{{ telecom.Period.End }}"
+      }
+      {% endif %}
+    }
+    {% if forloop.last == false %},{% endif %}
+    {% endfor %}
+  ],
+  "gender": "{{ msg.Gender | downcase }}",
+  "birthDate": "{{ msg.BirthDate }}",
+  "address": [
+    {% for address in msg.Addresses.Address %}
+    {
+      "use": "{{ address.Use }}",
+      "type": "{{ address.Type }}",
+      "text": "{{ address.Text }}",
+      "line": [
+        {% for line in address.Line %}"{{ line }}"{% if forloop.last == false %},{% endif %}{% endfor %}
+      ],
+      "city": "{{ address.City }}",
+      "district": "{{ address.District }}",
+      "state": "{{ address.State }}",
+      "postalCode": "{{ address.PostalCode }}",
+      "period": {
+        "start": "{{ address.Period.Start }}"
+      }
+    }
+    {% if forloop.last == false %},{% endif %}
+    {% endfor %}
+  ],
+  "contact": [
+    {% for contact in msg.Contacts.Contact %}
+    {
+      "relationship": [
+        {
+          "coding": [
+            {
+              "system": "{{ contact.Relationship.System }}",
+              "code": "{{ contact.Relationship.Code }}"
+            }
+          ]
+        }
+      ],
+      "name": {
+        "family": "{{ contact.Name.Family }}",
+        "given": [
+          {% for given in contact.Name.Given %}"{{ given }}"{% if forloop.last == false %},{% endif %}{% endfor %}
+        ]
+      },
+      "telecom": [
+        {% for telecom in contact.Telecom %}
+        {
+          "system": "{{ telecom.System }}",
+          "value": "{{ telecom.Value }}"
+        }
+        {% if forloop.last == false %},{% endif %}
+        {% endfor %}
+      ],
+      "address": {
+        "use": "{{ contact.Address.Use }}",
+        "line": [
+          {% for line in contact.Address.Line %}"{{ line }}"{% if forloop.last == false %},{% endif %}{% endfor %}
+        ],
+        "city": "{{ contact.Address.City }}",
+        "district": "{{ contact.Address.District }}",
+        "state": "{{ contact.Address.State }}",
+        "postalCode": "{{ contact.Address.PostalCode }}"
+      },
+      "gender": "{{ contact.Gender }}",
+      "period": {
+        "start": "{{ contact.Period.Start }}"
+      }
+    }
+    {% if forloop.last == false %},{% endif %}
+    {% endfor %}
+  ],
+  "managingOrganization": {
+    "reference": "{{ msg.ManagingOrganization }}"
+  }
+}

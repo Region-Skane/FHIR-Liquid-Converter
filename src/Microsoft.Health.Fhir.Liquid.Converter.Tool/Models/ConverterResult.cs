@@ -10,10 +10,19 @@ namespace Microsoft.Health.Fhir.Liquid.Converter.Tool.Models
 {
     public class ConverterResult
     {
-        public ConverterResult(ProcessStatus status, string fhirResource, TraceInfo traceInfo)
+        public ConverterResult(ProcessStatus status, string fhirResource, TraceInfo traceInfo, string errorMessage = null)
         {
             Status = status;
-            FhirResource = new JRaw(fhirResource);
+            if (status == ProcessStatus.OK)
+            {
+                FhirResource = new JRaw(fhirResource);
+            }
+            else
+            {
+                RawOutput = fhirResource;
+            }
+
+            ErrorMessage = errorMessage;
             TraceInfo = traceInfo;
         }
 
@@ -22,5 +31,9 @@ namespace Microsoft.Health.Fhir.Liquid.Converter.Tool.Models
         public JRaw FhirResource { get; set; }
 
         public TraceInfo TraceInfo { get; set; }
+
+        public string RawOutput { get; set; }
+
+        public string ErrorMessage { get; set; }
     }
 }

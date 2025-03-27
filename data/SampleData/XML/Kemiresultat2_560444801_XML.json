@@ -1,0 +1,591 @@
+{
+  "Message": {
+    "$": {
+      "xsi:schemaLocation": "http://www.kith.no/xmlstds/labsvar/2012-02-15 svar-v1.4.xsd",
+      "xmlns": "http://www.kith.no/xmlstds/labsvar/2012-02-15",
+      "xmlns:xsd": "http://www.w3.org/2001/XMLSchema.xsd",
+      "xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance"
+    },
+    "Type": [
+      {
+        "$": {
+          "V": "SVAR_LAB",
+          "DN": "Svarrapport-Laboratoriemedisin"
+        }
+      }
+    ],
+    "MIGversion": [
+      "v1.4 2012-02-15"
+    ],
+    "GenDate": [
+      {
+        "$": {
+          "V": "2024-10-14T10:32:00"
+        }
+      }
+    ],
+    "MsgId": [
+      "dad5a830-f924-450c-a7c6-4e670b143352"
+    ],
+    "ServReport": [
+      {
+        "ServType": [
+          {
+            "$": {
+              "V": "M",
+              "DN": "Endring"
+            }
+          }
+        ],
+        "IssueDate": [
+          {
+            "$": {
+              "V": "2024-10-14T10:27:00"
+            }
+          }
+        ],
+        "Status": [
+          {
+            "$": {
+              "V": "F",
+              "DN": "Endelig rapport"
+            }
+          }
+        ],
+        "Ack": [
+          {
+            "$": {
+              "V": "J",
+              "DN": "Avsenderen ønsker bekreftelse"
+            }
+          }
+        ],
+        "MsgDescr": [
+          {
+            "$": {
+              "V": "CLIN",
+              "DN": "Klinisk kjemi"
+            }
+          }
+        ],
+        "ServProvId": [
+          "24288000106"
+        ],
+        "ServReq": [
+          {
+            "IssueDate": [
+              {
+                "$": {
+                  "V": "2024-10-14T10:27:00"
+                }
+              }
+            ],
+            "MsgDescr": [
+              {
+                "$": {
+                  "V": "CLIN",
+                  "DN": "Klinisk kjemi"
+                }
+              }
+            ],
+            "Id": [
+              "24288000106"
+            ],
+            "ReceiptDate": [
+              {
+                "$": {
+                  "V": "2024-10-14T10:29:00"
+                }
+              }
+            ],
+            "IdByServProvider": [
+              "24288000106"
+            ],
+            "Comment": [
+              {
+                "TextResultValue": [
+                  "Begärt startdatum: 2024-10-14 10:25:00"
+                ]
+              }
+            ]
+          }
+        ],
+        "Patient": [
+          {
+            "Sex": [
+              {
+                "$": {
+                  "V": "2",
+                  "DN": "Kvinne"
+                }
+              }
+            ],
+            "Name": [
+              "Labsson, Halina"
+            ],
+            "OffId": [
+              "19980809-2382"
+            ],
+            "TypeOffId": [
+              {
+                "$": {
+                  "V": "FNR",
+                  "DN": "Fødselsnummer"
+                }
+              }
+            ],
+            "Address": [
+              {
+                "Type": [
+                  {
+                    "$": {
+                      "V": "H",
+                      "DN": "Bostedsadresse"
+                    }
+                  }
+                ],
+                "StreetAdr": [
+                  "Höjagatan 5B"
+                ],
+                "PostalCode": [
+                  "21141"
+                ],
+                "City": [
+                  "Malmö"
+                ]
+              }
+            ],
+            "AnalysedSubject": [
+              {
+                "CollectedSample": [
+                  {
+                    "CollectedDate": [
+                      {
+                        "$": {
+                          "V": "2024-10-14T10:26:00"
+                        }
+                      }
+                    ]
+                  }
+                ],
+                "Type": [
+                  "U-, Urin"
+                ],
+                "IdByRequester": [
+                  "24288000106A"
+                ],
+                "Number": [
+                  "1"
+                ],
+                "IdByServProvider": [
+                  "24288000106-001"
+                ]
+              }
+            ],
+            "ResultItem": [
+              {
+                "TextResult": [
+                  {
+                    "Heading": [
+                      {
+                        "$": {
+                          "V": "GR",
+                          "DN": "Gruppe"
+                        }
+                      }
+                    ],
+                    "TextResultValue": [
+                      "Rapportgrupp för Urin/Dialysvätskor"
+                    ]
+                  }
+                ],
+                "ResultItem": [
+                  {
+                    "NumResult": [
+                      {
+                        "NumResultValue": [
+                          {
+                            "$": {
+                              "V": "58.0",
+                              "U": "mmol/L"
+                            }
+                          }
+                        ]
+                      }
+                    ],
+                    "ServType": [
+                      {
+                        "$": {
+                          "V": "H",
+                          "DN": "Historikk"
+                        }
+                      }
+                    ],
+                    "Investigation": [
+                      {
+                        "Id": [
+                          {
+                            "$": {
+                              "V": "NPU09102",
+                              "S": "2.16.578.1.12.4.1.1.7280",
+                              "DN": "U-Kreatinin "
+                            }
+                          },
+                          {
+                            "$": {
+                              "V": "U-KREA",
+                              "S": "2.16.578.1.12.4.1.1.8212",
+                              "OT": "U-Kreatinin "
+                            }
+                          }
+                        ],
+                        "Spec": [
+                          {
+                            "$": {
+                              "V": "560444801",
+                              "S": "2.16.578.1.12.4.1.1.9999"
+                            }
+                          }
+                        ]
+                      }
+                    ],
+                    "InvDate": [
+                      {
+                        "$": {
+                          "V": "2024-10-14T10:30:00"
+                        }
+                      }
+                    ],
+                    "StatusInvestigation": [
+                      {
+                        "$": {
+                          "V": "3",
+                          "DN": "Endelig"
+                        }
+                      }
+                    ],
+                    "RefAnalysedSubject": [
+                      "24288000106-001"
+                    ],
+                    "Accredited": [
+                      {
+                        "$": {
+                          "V": "true"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "TextResult": [
+                  {
+                    "Heading": [
+                      {
+                        "$": {
+                          "V": "GR",
+                          "DN": "Gruppe"
+                        }
+                      }
+                    ],
+                    "TextResultValue": [
+                      "Rapportgrupp för Amfetaminer"
+                    ]
+                  }
+                ],
+                "ResultItem": [
+                  {
+                    "TextResult": [
+                      {
+                        "Heading": [
+                          {
+                            "$": {
+                              "V": "LR",
+                              "DN": "Laboratorieresultat"
+                            }
+                          }
+                        ],
+                        "TextResultValue": [
+                          "POS"
+                        ],
+                        "Unit": [
+                          "µg/L"
+                        ]
+                      }
+                    ],
+                    "ServType": [
+                      {
+                        "$": {
+                          "V": "N",
+                          "DN": "Ny"
+                        }
+                      }
+                    ],
+                    "RefInterval": [
+                      {
+                        "Descr": [
+                          "NEG"
+                        ]
+                      }
+                    ],
+                    "Investigation": [
+                      {
+                        "Id": [
+                          {
+                            "$": {
+                              "V": "NPU08960",
+                              "S": "2.16.578.1.12.4.1.1.7280",
+                              "DN": "U-Amfetamin(screen) "
+                            }
+                          },
+                          {
+                            "$": {
+                              "V": "U-AMF-SCREEN",
+                              "S": "2.16.578.1.12.4.1.1.8212",
+                              "OT": "U-Amfetamin(screen) "
+                            }
+                          }
+                        ],
+                        "Spec": [
+                          {
+                            "$": {
+                              "V": "560444801",
+                              "S": "2.16.578.1.12.4.1.1.9999"
+                            }
+                          }
+                        ]
+                      }
+                    ],
+                    "InvDate": [
+                      {
+                        "$": {
+                          "V": "2024-10-14T10:30:00"
+                        }
+                      }
+                    ],
+                    "Comment": [
+                      "Gränsvärde 500 µg/L.\r\nOmfattar amfetamin, metamfetamin och ecstacy."
+                    ],
+                    "StatusInvestigation": [
+                      {
+                        "$": {
+                          "V": "3",
+                          "DN": "Endelig"
+                        }
+                      }
+                    ],
+                    "RefAnalysedSubject": [
+                      "24288000106-001"
+                    ],
+                    "Accredited": [
+                      {
+                        "$": {
+                          "V": "true"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "TextResult": [
+                      {
+                        "Heading": [
+                          {
+                            "$": {
+                              "V": "LR",
+                              "DN": "Laboratorieresultat"
+                            }
+                          }
+                        ],
+                        "TextResultValue": [
+                          "POS"
+                        ],
+                        "Unit": [
+                          "µg/L"
+                        ]
+                      }
+                    ],
+                    "ServType": [
+                      {
+                        "$": {
+                          "V": "N",
+                          "DN": "Ny"
+                        }
+                      }
+                    ],
+                    "RefInterval": [
+                      {
+                        "Descr": [
+                          "NEG"
+                        ]
+                      }
+                    ],
+                    "Investigation": [
+                      {
+                        "Id": [
+                          {
+                            "$": {
+                              "V": "SWE05173",
+                              "S": "2.16.578.1.12.4.1.1.7280",
+                              "DN": "U-Amfetaminer(verif) "
+                            }
+                          },
+                          {
+                            "$": {
+                              "V": "U-AMF-VERIF",
+                              "S": "2.16.578.1.12.4.1.1.8212",
+                              "OT": "U-Amfetaminer(verif) "
+                            }
+                          }
+                        ],
+                        "Spec": [
+                          {
+                            "$": {
+                              "V": "560444801",
+                              "S": "2.16.578.1.12.4.1.1.9999"
+                            }
+                          }
+                        ]
+                      }
+                    ],
+                    "InvDate": [
+                      {
+                        "$": {
+                          "V": "2024-10-14T10:31:00"
+                        }
+                      }
+                    ],
+                    "Comment": [
+                      "Amfetamin påvisat vid verifiering.\r\n Gränsvärde 200 µg/L."
+                    ],
+                    "StatusInvestigation": [
+                      {
+                        "$": {
+                          "V": "3",
+                          "DN": "Endelig"
+                        }
+                      }
+                    ],
+                    "RefAnalysedSubject": [
+                      "24288000106-001"
+                    ],
+                    "Accredited": [
+                      {
+                        "$": {
+                          "V": "true"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "ServProvider": [
+          {
+            "HCP": [
+              {
+                "Inst": [
+                  {
+                    "Name": [
+                      "Klinisk kemi, Lund"
+                    ],
+                    "Id": [
+                      "LUKENN"
+                    ],
+                    "TypeId": [
+                      {
+                        "$": {
+                          "V": "",
+                          "DN": ""
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "Requester": [
+          {
+            "Role": [
+              {
+                "$": {
+                  "V": "REQ",
+                  "DN": "Rekvirent"
+                }
+              }
+            ],
+            "ComMethod": [
+              {
+                "$": {
+                  "V": "EDI",
+                  "DN": "EDI"
+                }
+              }
+            ],
+            "HCP": [
+              {
+                "Inst": [
+                  {
+                    "Name": [
+                      "Barn- och Ungdomsmottagning Ystad"
+                    ],
+                    "Id": [
+                      "YSBAUM"
+                    ],
+                    "TypeId": [
+                      {
+                        "$": {
+                          "V": "",
+                          "DN": ""
+                        }
+                      }
+                    ],
+                    "HCPerson": [
+                      {
+                        "Name": [
+                          "959159"
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "PaymentResponsible": [
+          {
+            "TypeGuarantor": [
+              "Betalingsansvarlig"
+            ],
+            "HCP": [
+              {
+                "Inst": [
+                  {
+                    "Name": [
+                      "Barn- och Ungdomsmottagning Ystad"
+                    ],
+                    "Id": [
+                      "YSBAUM"
+                    ],
+                    "TypeId": [
+                      {
+                        "$": {
+                          "V": "",
+                          "DN": ""
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

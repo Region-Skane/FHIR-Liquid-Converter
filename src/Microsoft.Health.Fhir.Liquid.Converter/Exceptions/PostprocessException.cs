@@ -15,9 +15,20 @@ namespace Microsoft.Health.Fhir.Liquid.Converter.Exceptions
         {
         }
 
+        public PostprocessException(FhirConverterErrorCode fhirConverterErrorCode, string message, string rawOutputString)
+            : base(fhirConverterErrorCode, message)
+        {
+            RawOutputString = rawOutputString;
+        }
+
         public PostprocessException(FhirConverterErrorCode fhirConverterErrorCode, string message, Exception innerException)
             : base(fhirConverterErrorCode, message, innerException)
         {
         }
+
+        /// <summary>
+        /// Contains the raw output from liquid transformation in case of output validation error
+        /// </summary>
+        public string RawOutputString { get; }
     }
 }

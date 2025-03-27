@@ -1,0 +1,41 @@
+<Bundle xmlns="http://hl7.org/fhir">
+  <type value="collection" />
+  <entry>
+    {% for patient in msg.Department.Patients.Patient %}
+    <resource>
+      <Patient>
+        <id value="{{ patient.Id }}" />
+        <name>
+          <given value="{{ patient.PersonalInfo.FirstName }}" />
+          <family value="{{ patient.PersonalInfo.LastName }}" />
+        </name>
+        <birthDate value="{{ patient.PersonalInfo.BirthDate }}" />
+        <gender value="{% if patient.PersonalInfo.Gender == 'M' %}male{% elsif patient.PersonalInfo.Gender == 'F' %}female{% else %}unknown{% endif %}" />
+        <telecom>
+          <system value="phone" />
+          <value value="{{ patient.Contact.Phone['#text'] }}" />
+          <use value="{% if patient.Contact.Phone['@type'] == 'mobile' %}mobile{% elsif patient.Contact.Phone['@type'] == 'work' %}work{% elsif patient.Contact.Phone['@type'] == 'home' %}home{% else %}other{% endif %}" />
+        </telecom>
+        <telecom>
+          <system value="email" />
+          <value value="{{ patient.Contact.Email }}" />
+        </telecom>
+        <extension url="http://hl7.org/fhir/StructureDefinition/patient-allergies">
+          {% for allergy in patient.MedicalRecords.Allergies.Allergy %}
+          <valueCodeableConcept>
+            <text value="{{ allergy.Substance }} - {{ allergy.Reaction }}" />
+          </valueCodeableConcept>
+          {% endfor %}
+        </extension>
+        <extension url="http://hl7.org/fhir/StructureDefinition/patient-medications">
+          {% for medication in patient.MedicalRecords.Medications.Medication %}
+          <valueCodeableConcept>
+            <text value="{{ medication.Name }} {{ medication.Dosage }} {{ medication.Frequency }}" />
+          </valueCodeableConcept>
+          {% endfor %}
+        </extension>
+      </Patient>
+    </resource>
+    {% endfor %}
+  </entry>
+</Bundle>

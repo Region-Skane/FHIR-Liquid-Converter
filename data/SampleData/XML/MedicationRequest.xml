@@ -1,0 +1,22 @@
+<MedicationRequest>
+  <Id>12345</Id>
+  <Status>active</Status>
+  <Intent>order</Intent>
+  <Medication>
+    <Code>123456</Code>
+    <Display>Aspirin</Display>
+  </Medication>
+  <Subject>
+    <Reference>Patient/789</Reference>
+    <Display>Alice Brown</Display>
+  </Subject>
+  <AuthoredOn>2024-12-01</AuthoredOn>
+  <DosageInstruction>
+    <Text>Take one tablet daily</Text>
+    <Timing>
+      <Code>
+        <Text>Once per day</Text>
+      </Code>
+    </Timing>
+  </DosageInstruction>
+</MedicationRequest>

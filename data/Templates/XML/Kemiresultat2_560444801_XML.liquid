@@ -1,0 +1,42 @@
+{
+  "resourceType": "DiagnosticReport",
+  "id": "{{ msg.MsgId }}",
+  "status": "{% if msg.ServReport.Status['@V'] == 'F' %}final{% else %}preliminary{% endif %}",
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://terminology.hl7.org/CodeSystem/v2-0074",
+          "code": "{{ msg.ServReport.MsgDescr['@V'] }}",
+          "display": "{{ msg.ServReport.MsgDescr['@DN'] }}"
+        }
+      ]
+    }
+  ],
+  "code": {
+    "coding": [
+      {
+        "system": "http://example.org/fhir/CodeSystem/lab-codes",
+        "code": "{{ msg.Type['@V'] }}",
+        "display": "{{ msg.Type['@DN'] }}"
+      }
+    ]
+  },
+"subject": {
+  "reference": "Patient/{{ msg.ServReport.Patient.OffId }}",
+  "display": "{{ msg.ServReport.Patient.Name }}"
+},
+  "effectiveDateTime": "{{ msg.ServReport.IssueDate['@V'] }}",
+  "issued": "{{ msg.GenDate['@V'] }}",
+  "performer": [
+    {
+      "reference": "Organization/{{ msg.ServReport.ServProvider.HCP.Inst.Id }}",
+      "display": "{{ msg.ServReport.ServProvider.HCP.Inst.Name }}"
+    }
+  ],
+  "result": [
+    {
+      "reference": "Observation/U-KREA"
+    }
+  ]
+}

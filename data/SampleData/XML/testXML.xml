@@ -1,0 +1,53 @@
+<Message xsi:schemaLocation="http://example.com/schema/v1 example.xsd" xmlns="http://example.com/schema/v1" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Header>
+    <DocumentInfo type="report" status="final">
+      Summary Report for 2024
+    </DocumentInfo>
+    <GeneratedBy id="system-01" name="AutomatedSystem">
+      <TimeStamp>2024-12-10T12:00:00Z</TimeStamp>
+    </GeneratedBy>
+  </Header>
+  <Body>
+    <Section id="s1" title="Overview">
+      <Description lang="en">
+        This section provides an overview of the system.
+        <Details source="internal" verified="true">Internal validation complete.</Details>
+      </Description>
+    </Section>
+    <Section id="s2" title="Details">
+      <Subsection id="s2.1">
+        <Title>Key Metrics</Title>
+        <Metric name="responseTime" unit="ms" threshold="100">
+          <Value>85</Value>
+          <Comment>Within acceptable range.</Comment>
+        </Metric>
+        <Metric name="uptime" unit="%" threshold="99.9">
+          <Value>99.95</Value>
+          <Comment>Exceeds threshold.</Comment>
+        </Metric>
+      </Subsection>
+      <Subsection id="s2.2">
+        <Title>Issues</Title>
+        <Issue id="i1" severity="high" status="open">
+          <Summary>Database connectivity issue</Summary>
+          <Details affectedSystems="Database1, Database2" reportedBy="monitoring-system">
+            Connection timeouts observed since 2024-12-09T10:00:00Z.
+          </Details>
+        </Issue>
+        <Issue id="i2" severity="low" status="resolved">
+          <Summary>Disk space warning</Summary>
+          <Details affectedSystems="StorageNode3" resolutionTime="2024-12-09T15:00:00Z">
+            Cleared temporary files.
+          </Details>
+        </Issue>
+      </Subsection>
+    </Section>
+  </Body>
+  <Footer>
+    <Acknowledgements>
+      <Team>Operations</Team>
+      <Contact email="support@example.com">Contact us for assistance.</Contact>
+    </Acknowledgements>
+    <GeneratedOn>2024-12-10</GeneratedOn>
+  </Footer>
+</Message>

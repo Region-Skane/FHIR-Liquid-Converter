@@ -34,6 +34,8 @@ namespace Microsoft.Health.Fhir.Liquid.Converter.Processors
             _parser = EnsureArg.IsNotNull(parser, nameof(parser));
         }
 
+        protected override DefaultRootTemplateParentPath DefaultRootTemplateParentPath { get; set; } = DefaultRootTemplateParentPath.Json;
+
         protected override string InternalConvert(string data, string rootTemplate, ITemplateProvider templateProvider, TraceInfo traceInfo = null)
         {
             object jsonData;
@@ -52,7 +54,7 @@ namespace Microsoft.Health.Fhir.Liquid.Converter.Processors
             return InternalConvertFromObject(jsonData, rootTemplate, templateProvider, traceInfo);
         }
 
-        protected override Context CreateContext(ITemplateProvider templateProvider, IDictionary<string, object> data, string rootTemplate)
+        protected override Context CreateBaseContext(ITemplateProvider templateProvider, IDictionary<string, object> data)
         {
             // Load data and templates
             var cancellationToken = Settings.TimeOut > 0 ? new CancellationTokenSource(Settings.TimeOut).Token : CancellationToken.None;
@@ -67,12 +69,6 @@ namespace Microsoft.Health.Fhir.Liquid.Converter.Processors
             {
                 ValidateSchemas = new List<JsonSchema>(),
             };
-
-            // Load filters
-            context.AddFilters(typeof(Filters));
-
-            // Add root template's parent path to context.
-            AddRootTemplatePathScope(context, templateProvider, rootTemplate);
 
             return context;
         }

@@ -18,13 +18,13 @@ namespace Microsoft.Health.Fhir.Liquid.Converter.OutputProcessors
 {
     public static class PostProcessor
     {
-        public static JObject Process(string input)
+        public static JObject Process(string input, bool allowOutputValidationErrors)
         {
-            var jsonObject = ParseJson(input);
+            var jsonObject = ParseJson(input, allowOutputValidationErrors);
             return MergeJson(jsonObject);
         }
 
-        public static JObject ParseJson(string input)
+        public static JObject ParseJson(string input, bool allowOutputValidationErrors)
         {
             var stream = new AntlrInputStream(input);
             var lexer = new jsonLexer(stream);
@@ -38,7 +38,10 @@ namespace Microsoft.Health.Fhir.Liquid.Converter.OutputProcessors
             var tree = parser.json();
             if (parser.NumberOfSyntaxErrors > 0)
             {
-                throw new PostprocessException(FhirConverterErrorCode.JsonParsingError, string.Format(Resources.JsonParsingError, errorBuilder));
+                throw new PostprocessException(
+                    FhirConverterErrorCode.JsonParsingError,
+                    string.Format(Resources.JsonParsingError, errorBuilder),
+                    rawOutputString: allowOutputValidationErrors ? input : null); // attach the input as rawOutputString when allowOutputValidationErrors==true
             }
 
             var listener = new JsonListener();

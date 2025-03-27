@@ -151,7 +151,8 @@ namespace ServiceWell.Health.Fhir.Liquid.Converter.UnitTests.Processors
             Assert.True(JToken.DeepEquals(JObject.Parse(_jsonExpectData), JToken.Parse(result)));
         }
 
-
+        /*
+         * Note: Comment out Olofs local tests
         [Fact]
         public void Tirs2()
         {
@@ -199,5 +200,6 @@ namespace ServiceWell.Health.Fhir.Liquid.Converter.UnitTests.Processors
            // var result = processor.Convert(testData, "translate", templateProvider);
             Assert.True(JToken.DeepEquals(JObject.Parse(_jsonTirsTest2ExpectData), JToken.Parse(result)));
         }
+        */
     }
 }

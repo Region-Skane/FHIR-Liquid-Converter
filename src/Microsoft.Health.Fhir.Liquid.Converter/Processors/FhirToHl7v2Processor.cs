@@ -225,7 +225,7 @@ namespace Microsoft.Health.Fhir.Liquid.Converter.Processors
             return sb.ToString();
         }
 
-        protected override Context CreateContext(ITemplateProvider templateProvider, IDictionary<string, object> data, string rootTemplate)
+        protected override Context CreateBaseContext(ITemplateProvider templateProvider, IDictionary<string, object> data)
         {
             // Load data and templates
             var cancellationToken = Settings.TimeOut > 0 ? new CancellationTokenSource(Settings.TimeOut).Token : CancellationToken.None;
@@ -240,9 +240,6 @@ namespace Microsoft.Health.Fhir.Liquid.Converter.Processors
             {
                 ValidateSchemas = new List<JsonSchema>(),
             };
-
-            // Load filters
-            context.AddFilters(typeof(Filters));
 
             return context;
         }

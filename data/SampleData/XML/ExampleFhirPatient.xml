@@ -1,0 +1,121 @@
+<Patient>
+  <PatientId>example</PatientId>
+  <Summary>
+    <Status>generated</Status>
+    <Description>
+      <HTML>
+        <![CDATA[
+        <div xmlns="http://www.w3.org/1999/xhtml"><p style="border: 1px #661aff solid; background-color: #e6e6ff; padding: 10px;"><b>Jim </b> male, DoB: 1974-12-25 ( Medical record number: 12345&nbsp;(use:&nbsp;USUAL,&nbsp;period:&nbsp;2001-05-06 --&gt; (ongoing)))</p><hr/><table class="grid"><tr><td style="background-color: #f3f5da" title="Record is active">Active:</td><td>true</td><td style="background-color: #f3f5da" title="Known status of Patient">Deceased:</td><td colspan="3">false</td></tr><tr><td style="background-color: #f3f5da" title="Alternate names (see the one above)">Alt Names:</td><td colspan="3"><ul><li>Peter James Chalmers (OFFICIAL)</li><li>Peter James Windsor (MAIDEN)</li></ul></td></tr><tr><td style="background-color: #f3f5da" title="Ways to contact the Patient">Contact Details:</td><td colspan="3"><ul><li>-unknown-(HOME)</li><li>ph: (03) 5555 6473(WORK)</li><li>ph: (03) 3410 5613(MOBILE)</li><li>ph: (03) 5555 8834(OLD)</li><li>534 Erewhon St PeasantVille, Rainbow, Vic  3999(HOME)</li></ul></td></tr><tr><td style="background-color: #f3f5da" title="Nominated Contact: Next-of-Kin">Next-of-Kin:</td><td colspan="3"><ul><li>Bénédicte du Marché  (female)</li><li>534 Erewhon St PleasantVille Vic 3999 (HOME)</li><li><a href="tel:+33(237)998327">+33 (237) 998327</a></li><li>Valid Period: 2012 --&gt; (ongoing)</li></ul></td></tr><tr><td style="background-color: #f3f5da" title="Patient Links">Links:</td><td colspan="3"><ul><li>Managing Organization: <a href="organization-example-gastro.html">Organization/1</a> "Gastroenterology"</li></ul></td></tr></table></div>
+        ]]>
+      </HTML>
+    </Description>
+  </Summary>
+  <Identifiers>
+    <Identifier>
+      <Use>usual</Use>
+      <Type>
+        <System>http://terminology.hl7.org/CodeSystem/v2-0203</System>
+        <Code>MR</Code>
+      </Type>
+      <System>urn:oid:1.2.36.146.595.217.0.1</System>
+      <Value>12345</Value>
+      <Period>
+        <Start>2001-05-06</Start>
+      </Period>
+      <Assigner>Acme Healthcare</Assigner>
+    </Identifier>
+  </Identifiers>
+  <Active>true</Active>
+  <Names>
+    <Name>
+      <Use>official</Use>
+      <Family>Chalmers</Family>
+      <Given>Peter</Given>
+      <Given>James</Given>
+    </Name>
+    <Name>
+      <Use>usual</Use>
+      <Given>Jim</Given>
+    </Name>
+    <Name>
+      <Use>maiden</Use>
+      <Family>Windsor</Family>
+      <Given>Peter</Given>
+      <Given>James</Given>
+      <Period>
+        <End>2002</End>
+      </Period>
+    </Name>
+  </Names>
+  <Telecoms>
+    <Telecom>
+      <Use>home</Use>
+    </Telecom>
+    <Telecom>
+      <System>phone</System>
+      <Value>(03) 5555 6473</Value>
+      <Use>work</Use>
+      <Rank>1</Rank>
+    </Telecom>
+    <Telecom>
+      <System>phone</System>
+      <Value>(03) 3410 5613</Value>
+      <Use>mobile</Use>
+      <Rank>2</Rank>
+    </Telecom>
+    <Telecom>
+      <System>phone</System>
+      <Value>(03) 5555 8834</Value>
+      <Use>old</Use>
+      <Period>
+        <End>2014</End>
+      </Period>
+    </Telecom>
+  </Telecoms>
+  <Gender>male</Gender>
+  <BirthDate>1974-12-25</BirthDate>
+  <Addresses>
+    <Address>
+      <Use>home</Use>
+      <Type>both</Type>
+      <Text>534 Erewhon St PeasantVille, Rainbow, Vic  3999</Text>
+      <Line>534 Erewhon St</Line>
+      <City>PleasantVille</City>
+      <District>Rainbow</District>
+      <State>Vic</State>
+      <PostalCode>3999</PostalCode>
+      <Period>
+        <Start>1974-12-25</Start>
+      </Period>
+    </Address>
+  </Addresses>
+  <Contacts>
+    <Contact>
+      <Relationship>
+        <System>http://terminology.hl7.org/CodeSystem/v2-0131</System>
+        <Code>N</Code>
+      </Relationship>
+      <Name>
+        <Family>du Marché</Family>
+        <Given>Bénédicte</Given>
+      </Name>
+      <Telecom>
+        <System>phone</System>
+        <Value>+33 (237) 998327</Value>
+      </Telecom>
+      <Address>
+        <Use>home</Use>
+        <Line>534 Erewhon St</Line>
+        <City>PleasantVille</City>
+        <District>Rainbow</District>
+        <State>Vic</State>
+        <PostalCode>3999</PostalCode>
+      </Address>
+      <Gender>female</Gender>
+      <Period>
+        <Start>2012</Start>
+      </Period>
+    </Contact>
+  </Contacts>
+  <ManagingOrganization>Organization/1</ManagingOrganization>
+</Patient>

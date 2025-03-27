@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Microsoft.Extensions.Logging;
+using Microsoft.Health.Fhir.Liquid.Converter.Exceptions;
 using Microsoft.Health.Fhir.Liquid.Converter.Models;
 using Microsoft.Health.Fhir.Liquid.Converter.Models.Hl7v2;
 using Microsoft.Health.Fhir.Liquid.Converter.Processors;
@@ -33,6 +34,7 @@ namespace Microsoft.Health.Fhir.Liquid.Converter.Tool
             var dataProcessor = CreateDataProcessor(dataType);
             var templateProvider = CreateTemplateProvider(dataType, options.TemplateDirectory);
             DefaultProcessorSettings.EnableTelemetryLogger = options.IsVerboseEnabled;
+            DefaultProcessorSettings.AllowOutputValidationErrors = options.AllowOutputValidationErrors;
 
             if (!string.IsNullOrEmpty(options.InputDataContent))
             {
@@ -54,8 +56,17 @@ namespace Microsoft.Health.Fhir.Liquid.Converter.Tool
         private static void ConvertSingleFile(IFhirConverter dataProcessor, ITemplateProvider templateProvider, DataType dataType, string rootTemplate, string inputContent, string outputFile, bool isTraceInfo)
         {
             var traceInfo = CreateTraceInfo(dataType, isTraceInfo);
-            var resultString = dataProcessor.Convert(inputContent, rootTemplate, templateProvider, traceInfo);
-            var result = new ConverterResult(ProcessStatus.OK, resultString, traceInfo);
+            ConverterResult result = null;
+            try
+            {
+                var resultString = dataProcessor.Convert(inputContent, rootTemplate, templateProvider, traceInfo);
+                result = new ConverterResult(ProcessStatus.OK, resultString, traceInfo);
+            }
+            catch (PostprocessException pex) when (DefaultProcessorSettings.AllowOutputValidationErrors) // catch and set a ConverterResult only when AllowOutputValidationErrors==true
+            {
+                result = new ConverterResult(ProcessStatus.OutputValidationError, pex.RawOutputString, traceInfo, pex.Message);
+            }
+
             SaveConverterResult(outputFile, result);
         }
 
@@ -103,6 +114,8 @@ namespace Microsoft.Health.Fhir.Liquid.Converter.Tool
                 DataType.Ccda => new CcdaProcessor(DefaultProcessorSettings, ConsoleLoggerFactory.CreateLogger<CcdaProcessor>()),
                 DataType.Json => new JsonProcessor(DefaultProcessorSettings, ConsoleLoggerFactory.CreateLogger<JsonProcessor>()),
                 DataType.Fhir => new FhirProcessor(DefaultProcessorSettings, ConsoleLoggerFactory.CreateLogger<FhirProcessor>()),
+                DataType.XmlLeafing => new XmlLeafingProcessor(DefaultProcessorSettings, ConsoleLoggerFactory.CreateLogger<XmlProcessor>()),
+                DataType.XmlAlwaysArray => new XmlArrayProcessor(DefaultProcessorSettings, ConsoleLoggerFactory.CreateLogger<XmlProcessor>()),
                 _ => throw new NotImplementedException($"The conversion from data type {dataType} to FHIR is not supported")
             };
         }
@@ -126,6 +139,8 @@ namespace Microsoft.Health.Fhir.Liquid.Converter.Tool
                     .Where(x => CcdaExtensions.Contains(Path.GetExtension(x).ToLower())).ToList(),
                 DataType.Json => Directory.EnumerateFiles(inputDataFolder, "*.json", SearchOption.AllDirectories).ToList(),
                 DataType.Fhir => Directory.EnumerateFiles(inputDataFolder, "*.json", SearchOption.AllDirectories).ToList(),
+                DataType.XmlLeafing => Directory.EnumerateFiles(inputDataFolder, "*.xml", SearchOption.AllDirectories).ToList(),
+                DataType.XmlAlwaysArray => Directory.EnumerateFiles(inputDataFolder, "*.xml", SearchOption.AllDirectories).ToList(),
                 _ => new List<string>(),
             };
         }

@@ -14,5 +14,7 @@ namespace Microsoft.Health.Fhir.Liquid.Converter.Models
         Ccda,
         Json,
         Fhir,
+        XmlLeafing, // Flattening single-child elements into a single value
+        XmlAlwaysArray, // Always wraps children in an array
     }
 }

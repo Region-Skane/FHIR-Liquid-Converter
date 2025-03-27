@@ -31,6 +31,8 @@ namespace Microsoft.Health.Fhir.Liquid.Converter.UnitTests.DotLiquids
             Assert.Null(templateLocalFileSystem.GetTemplate("Foo"));
         }
 
+        /*
+         * Comment out Olofs local test
         [Fact]
         public void GivenAValidTemplateDirectory_WhenGetTemplate_CorrectResultsShouldBeReturned_OLOF()
         {
@@ -42,6 +44,7 @@ namespace Microsoft.Health.Fhir.Liquid.Converter.UnitTests.DotLiquids
             // Template does not exist
             Assert.Null(templateLocalFileSystem.GetTemplate("Foo"));
         }
+        */
 
         [Fact]
         public void GivenAValidTemplateDirectory_WhenGetTemplateWithContext_CorrectResultsShouldBeReturned()

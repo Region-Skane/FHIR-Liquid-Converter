@@ -16,5 +16,7 @@ namespace Microsoft.Health.Fhir.Liquid.Converter.Tool.Models
         OK,
         [EnumMember(Value = "Fail")]
         Fail,
+        [EnumMember(Value = "OutputValidationError")]
+        OutputValidationError,
     }
 }

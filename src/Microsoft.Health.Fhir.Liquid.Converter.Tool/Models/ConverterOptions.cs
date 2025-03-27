@@ -36,5 +36,8 @@ namespace Microsoft.Health.Fhir.Liquid.Converter.Tool.Models
 
         [Option('v', "Verbose", Required = false, HelpText = "Output detailed processor diagnostics and performance data.")]
         public bool IsVerboseEnabled { get; set; }
+
+        [Option('a', "AllowOutputValidationErrors", Required = false, HelpText = "Allow output validation errors and return the raw output if validation fails. By default, validation errors will cause the process to fail.")]
+        public bool AllowOutputValidationErrors { get; set; } = false;
     }
 }

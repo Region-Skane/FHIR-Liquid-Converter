@@ -5,8 +5,10 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using CommandLine;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Health.Fhir.Liquid.Converter.Tool.Models;
 
 namespace Microsoft.Health.Fhir.Liquid.Converter.Tool
@@ -15,6 +17,15 @@ namespace Microsoft.Health.Fhir.Liquid.Converter.Tool
     {
         public static async Task<int> Main(string[] args)
         {
+#if DEBUG
+            var appSettings = GetAppSettings();
+            if (appSettings.AllowDebuggerLaunch && !Debugger.IsAttached)
+            {
+                Debugger.Launch();
+                Console.WriteLine("Debugger attached, waiting for input...");
+                Console.ReadLine();
+            }
+#endif
             var parseResult = Parser.Default.ParseArguments<ConverterOptions, PullTemplateOptions, PushTemplateOptions>(args);
             try
             {
@@ -29,6 +40,19 @@ namespace Microsoft.Health.Fhir.Liquid.Converter.Tool
                 Console.Error.WriteLine($"Process failed: {ex.Message}");
                 return -1;
             }
+        }
+
+        private static AppSettings GetAppSettings()
+        {
+            var environment = Environment.GetEnvironmentVariable("DOTNET_ENVIRONMENT");
+
+            IConfiguration configuration = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: false)
+                .AddJsonFile($"appsettings.{environment}.json", optional: true, reloadOnChange: false)
+                .AddEnvironmentVariables()
+                .Build();
+
+            return configuration.Get<AppSettings>();
         }
 
         private static void HandleOptionsParseError(IEnumerable<Error> errors)

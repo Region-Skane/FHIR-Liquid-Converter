@@ -1,0 +1,35 @@
+<Bundle xmlns="http://hl7.org/fhir">
+  <type value="collection" />
+  <entry>
+    <resource>
+      <Patient>
+        <id value="789" />
+        <name>
+          <given value="Alice" />
+          <family value="Brown" />
+        </name>
+        <birthDate value="1990-07-15" />
+        <gender value="female" />
+        <telecom>
+          <system value="phone" />
+          <value value="555-9876" />
+          <use value="work" />
+        </telecom>
+        <telecom>
+          <system value="email" />
+          <value value="alice.brown@example.com" />
+        </telecom>
+        <extension url="http://hl7.org/fhir/StructureDefinition/patient-allergies">
+          <valueCodeableConcept>
+            <text value="Peanuts - Anaphylaxis" />
+          </valueCodeableConcept>
+        </extension>
+        <extension url="http://hl7.org/fhir/StructureDefinition/patient-medications">
+          <valueCodeableConcept>
+            <text value="Ibuprofen 200mg As needed" />
+          </valueCodeableConcept>
+        </extension>
+      </Patient>
+    </resource>
+  </entry>
+</Bundle>

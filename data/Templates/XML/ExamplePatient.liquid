@@ -1,0 +1,43 @@
+﻿{
+  "resourceType": "Patient",
+  "id": "{{ msg.id }}",
+  "identifier": [
+    {
+      "use": "{{ msg.identifier.use }}",
+      "type": {
+        "coding": [
+          {
+            "system": "{{ msg.identifier.type.coding.system }}",
+            "code": "{{ msg.identifier.type.coding.code }}"
+          }
+        ]
+      },
+      "system": "{{ msg.identifier.system }}",
+      "value": "{{ msg.identifier.value }}"
+    }
+  ],
+  "active": {{ msg.active | downcase }},
+  "name": [
+    {
+      "family": "{{ msg.name.family }}",
+      "given": [
+        "{{ msg.name.given }}"
+      ]
+    }
+  ],
+  "telecom": [
+    {% for t in msg.telecom %}
+    {
+      "system": "{{ t.system }}",
+      "value": "{{ t.value }}"
+    }{% if forloop.last == false %},{% endif %}
+    {% endfor %}
+  ],
+  "gender": "{{ msg.gender }}",
+  "birthDate": "{{ msg.birthDate }}",
+  "managingOrganization": {
+    "reference": "{{ msg.managingOrganization.reference }}",
+    "display": "{{ msg.managingOrganization.display }}"
+  },
+  "deceasedDateTime": "{{ msg.deceasedDateTime }}"
+}
