@@ -1,0 +1,49 @@
+name: PublishToolToNuGet
+trigger: none  # Manual only
+
+pr: none       # No PR trigger
+
+variables:
+  buildConfiguration: 'Release'
+  outputDir: '$(Build.ArtifactStagingDirectory)/nuget'
+
+resources:
+  pipelines:
+    - pipeline: buildToolPipeline
+      source: ServicewellFhirLiquidToolBuild
+      trigger: none              # manual only
+
+stages:
+- stage: PushToNuGet
+  displayName: 'Publish NuGet Package'
+  jobs:
+  - job: Push
+    displayName: 'Push .nupkg to nuget.org'
+    pool:
+      vmImage: 'windows-latest'
+    variables:
+      NUGET_SOURCE: 'https://api.nuget.org/v3/index.json'
+
+    steps:
+    - task: DownloadPipelineArtifact@2
+      displayName: 'Download NuGet Artifact from Pipeline Run'
+      inputs:
+        buildType: 'specific'
+        project: '$(System.TeamProject)'
+        definition: 'ServicewellFhirLiquidToolBuild'
+        runVersion: 'latest'
+        artifactName: 'nuget-package'
+        targetPath: '$(outputDir)'
+
+    - script: |
+        echo Listing contents of: "$(outputDir)"
+        dir "$(outputDir)"
+      displayName: 'List package(s) to publish'
+
+    - task: NuGetCommand@2
+      displayName: 'Push .nupkg to NuGet.org'
+      inputs:
+        command: push
+        packagesToPush: '$(outputDir)\Servicewell.Fhir.Liquid.Converter.Tool*.nupkg'    
+        nuGetFeedType: external
+        publishFeedCredentials: 'NuGetOrgServicewell'  # name of your NuGet.org service connection

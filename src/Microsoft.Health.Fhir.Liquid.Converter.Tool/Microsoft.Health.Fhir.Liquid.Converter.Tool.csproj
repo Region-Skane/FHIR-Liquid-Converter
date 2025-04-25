@@ -4,7 +4,7 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>$(LatestFramework)</TargetFramework>
     <IsPackable>true</IsPackable>
-    <NuspecFile>Microsoft.Health.Fhir.Liquid.Converter.Tool.nuspec</NuspecFile>
+    <NuspecFile>Servicewell.Fhir.Liquid.Converter.Tool.nuspec</NuspecFile>
   </PropertyGroup>
 
   <ItemGroup>

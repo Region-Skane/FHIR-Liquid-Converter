@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+  <metadata>
+    <id>Servicewell.Fhir.Liquid.Converter.Tool</id>
+    <version>$version$</version>
+    <authors>Servicewell</authors>
+    <license type="expression">Apache-2.0</license>
+    <copyright>Copyright © Servicewell</copyright>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>
+      An open source tool by Service Well AB for converting healthcare data to HL7 FHIR using Liquid templates,
+      with extended support for terminology translation and FHIR Implementation Guides integration.      
+    </description>
+    <readme>Readme.md</readme>
+    <projectUrl>https://github.com/servicewell/FHIR-Liquid-Converter</projectUrl>
+    <repository type="git" url="https://github.com/servicewell/FHIR-Liquid-Converter" />
+    <contentFiles>
+      <files include="any/net8.0/**/*.*" buildAction="Content" copyToOutput="true" />
+    </contentFiles>
+  </metadata>
+  <files>
+    <file src="Readme.md" target="." />
+    <file src="..\..\bin\publish\**" target="contentFiles\any\net8.0" />
+  </files>
+</package>

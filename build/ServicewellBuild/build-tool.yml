@@ -1,0 +1,67 @@
+trigger:
+- github/public-main
+
+pool:
+  vmImage: 'windows-latest'
+
+variables:
+  buildConfiguration: 'Release'
+  baseVersion: '0.9.0-preview'
+  packageVersion: '$(baseVersion)-build$(Build.BuildNumber)'
+  toolProjectPath: 'src/Microsoft.Health.Fhir.Liquid.Converter.Tool'
+  outputDir: '$(Build.ArtifactStagingDirectory)/nuget'
+
+steps:
+- task: UseDotNet@2
+  inputs:
+    packageType: sdk
+    version: '8.x'
+
+- script: |
+    echo "Build.BuildNumber: $(Build.BuildNumber)"
+    echo "baseVersion: $(baseVersion)"
+    echo "packageVersion: $(packageVersion)"
+  displayName: 'Debug: Version Variables'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Restore'
+  inputs:
+    command: 'restore'
+    projects: '$(toolProjectPath)/*.csproj'
+    feedsToUse: 'config'
+    nugetConfigPath: '$(Build.SourcesDirectory)/nuget.servicewell.config' # nuget.servicewell.config is the custom NuGet config used for CI builds
+    restoreArguments: '--disable-parallel'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Build'
+  inputs:
+    command: 'build'
+    projects: '$(toolProjectPath)/*.csproj'
+    arguments: '--configuration $(buildConfiguration)'
+
+- task: DotNetCoreCLI@2
+  displayName: 'dotnet publish tool project'
+  inputs:
+    command: publish
+    projects: '$(toolProjectPath)/*.csproj'
+    arguments: '--configuration $(buildConfiguration) --output $(Build.SourcesDirectory)/bin/publish'
+    publishWebProjects: false
+    zipAfterPublish: false
+    nobuild: true
+
+- task: DotNetCoreCLI@2
+  displayName: 'dotnet pack tool project'
+  inputs:
+    command: custom
+    custom: pack
+    projects: '$(toolProjectPath)/*.csproj'
+    arguments: >
+      --configuration $(buildConfiguration)
+      --output $(outputDir)
+      --no-build
+      -p:NuspecProperties="version=$(packageVersion)"
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(outputDir)'
+    ArtifactName: 'nuget-package'
