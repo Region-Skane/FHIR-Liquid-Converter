@@ -1,101 +1,155 @@
-# FHIR Converter
+# FHIR Liquid Converter
 
-FHIR converter is an open source project that enables conversion of health data from legacy formats to and from FHIR.  The FHIR converter uses the [Liquid template language](https://shopify.github.io/liquid/) and the .NET runtime.
+An open source tool by **Service Well AB** for converting healthcare data to HL7 FHIR using Liquid templates,  
+with extended support for terminology translation and FHIR Implementation Guides integration.
 
-The FHIR converter supports the following conversions: **HL7v2 to FHIR**, **C-CDA to FHIR**, **JSON to FHIR**, **FHIR STU3 to R4**, and **FHIR to HL7v2** (*Preview*).
+---
 
-The converter uses templates that define mappings between these different data formats. The templates are written in [Liquid](https://shopify.github.io/liquid/) templating language and make use of custom [filters](docs/Filters-and-Tags.md).  
+## License
 
-The converter comes with a few ready-to-use templates. If needed, you can create a new template, or modify existing templates to meet your specific conversion requirements. The provided templates are based off of HL7 v2.8. Other versions may require you to make modifications to these templates on your own. See [Templates & Authoring](#templates--authoring) for specifics.
+This project is licensed under the Apache License, Version 2.0.  
+See the [LICENSE](LICENSE) file for full license text.
 
-## What's New?
-The latest iteration of the *Preview* FHIR converter makes some significant changes over [previous versions](#previous-versions).
+**Third-party components:**  
+Portions of this project include source code from Microsoft Corporation,  
+which is licensed under the MIT License.
 
-Some of the changes include:
- * Containerized API
- * Support Azure Storage for customer templates.
- * Removal of Azure Container repository dependency for custom templates.
- * Support for FHIR to HL7v2 conversion.
+The original Microsoft source files retain their copyright  
+and license headers. These headers may refer to a `LICENSE` file in the repo root,  
+but in this project, the MIT License text is provided in [`LICENSE-MICROSOFT.txt`](LICENSE-MICROSOFT.txt).
 
- All the documentation for the new *preview* FHIR converter API can be found in the [How to Guides](docs/how-to-guides/) folder.
+For clarity:
+- The overall project license is **Apache License 2.0**.
+- The MIT license applies only to the specific files originating from Microsoft.
+
+---
+
+## What's New? (April 2025)
+
+The latest updates include:
+
+- Support for terminology translation via Ontoserver or local mapping files.
+- Improved caching and error handling for terminology filters.
+- XML as source format.
+- Compatible with the FHIR Liquid Converter Extension for VS Code with better debugging possibilities.
+
+---
 
 ## Architecture
 
-The FHIR converter API *preview* provides [REST based APIs](#api) to perform conversion requests.
+The FHIR Liquid Converter is built around:
 
-The FHIR converter APIs are offered as a container artifact in [Microsoft Container Registry](https://github.com/microsoft/containerregistry).
-This image can be downloaded and run as a web service on a container hosting platform in your Azure tenant; that clients can target for conversion requests.
+- **Liquid templates** for defining data mappings.
+- **Terminology filters** for concept translations.
+- Optional integration with **Ontoserver** for terminology services.
 
-![Convert setup](/docs/images/convert-setup.png)
+Goal: Use FHIR IGs (Implementation Guides) as the foundation for conversion projects with the FLC extension.  
+The FLC extension holds the Liquid templates and also FSH for documentation, ConceptMaps, LogicalModels,  
+Mapping resources, etc. Everything can be tested locally and published/distributed as a standard FHIR IG.
+
+---
 
 ## Templates & Authoring
 
-The FHIR converter API comes with several pre-built templates you can use as reference as to create your own.
+Templates are written in [Liquid](https://shopify.github.io/liquid/) and leverage both built-in and custom filters.
 
-| Conversion | Notes |
-| ----- | ----- |
-| [HL7v2 to FHIR](/docs/HL7v2-templates.md)| Important points to note for HL7v2 to FHIR conversion: [see here](docs/HL7v2-ImportantPoints.md) <br> Common FHIR Validator errors/warning you might run into, and their explanations: [see here](docs/HL7v2-FHIRValidator.md) | 
-| [C-CDA to FHIR](/data/Templates/Ccda/) | | 
-| [JSON to FHIR](/data/Templates/Json/) | | 
-| [FHIR STU3 to R4](/data/Templates/Stu3ToR4/) | [Differences between STU3 & R4](/docs/Stu3R4-resources-differences.md) | 
-| FHIR to HL7v2 (*Preview*) | |
+| Conversion Type              | Notes                                        |
+|-----------------------------|-----------------------------------------------|
+| HL7v2 to FHIR                | Customizable using Liquid templates.         |
+| JSON to FHIR                 | Supported with flexible mapping logic.       |
+| FHIR STU3 to R4              | Supports version migration mappings.         |
+| FHIR to HL7v2 (*Preview*)    | Early support for reverse mappings.          |
+| XML to FHIR   (*Preview*)    | Supported with flexible mapping logic.       |
 
 ### Concepts
 
-In addition to the example [templates](data/Templates) provided there are several important concepts to review and consider when creating your own templates, including:
-- [Filters summary](docs/Filters-and-Tags.md)
-- [Snippet concept](docs/SnippetConcept.md)
-- [Resource Id generation](docs/concepts/resource-id-generation.md)
-- [Validation & post processing](docs/concepts/validation-and-postprocessing.md)
+When authoring templates, consider reviewing:
 
-To use your custom templates, the FHIR converter API offers robust support for storing and retrieving your templates from Azure storage. For more information see: [Template Store Integration](/docs/how-to-guides/enable-template-store-integration.md).
+- [Filters and Tags](docs/Filters-and-Tags.md)
+- [Snippet Concept](docs/SnippetConcept.md)
+- [Resource ID Generation](docs/concepts/resource-id-generation.md)
+- [Validation and Post-processing](docs/concepts/validation-and-postprocessing.md)
+
+---
+
+## Terminology Dependencies
+
+The FHIR Liquid Converter allows specifying a FHIR Terminology Server that is required for specific terminology filters. This enables:
+
+- Automatic upload of terminology resources to Ontoserver.
+- Validation that required dependencies are present.
+
+Terminology translation can be done at runtime via Ontoserver or via local mapping files for batch processing and migrations.
+
+---
+
+## Added Value and Project Direction
+
+This project is a fork of the original Microsoft FHIR Converter, with enhancements and strategic differences led by **Service Well AB**.
+
+### 🚀 Advanced Terminology Service Integration
+
+- Support for **FHIR Terminology Services**, including:
+  - ConceptMap
+  - Local mapping files for migrations and batch processing (MS-style fallback where appropriate).
+- Focus on making FHIR IG and terminology a **first-class citizen** of the conversion process — not an afterthought.
+
+### Native Integration with FHIR Implementation Guides (IG)
+
+- Mapping templates are treated as part of the **IG structure** — authored and versioned together.
+- Template packages are published as **FHIR Packages (npm-compatible)**, supporting dependency resolution via:
+  - Private NPM feeds.
+  - Standard FHIR Package tooling.
+- Enables traceability and governance:
+  - Which ConceptMaps and templates were used for a specific IG release.
+  - Which terminology versions are required.
+
+This approach provides stronger alignment with real-world healthcare interoperability projects and national/international specifications.
+
+### ⚡ Why FLC?
+
+- Simplifies migration from legacy systems while staying fully compliant with FHIR best practices.
+- Ensures that **terminology mappings** are handled consistently across all stages — from development, to testing, to production.
+- Allows combining local mapping performance (batch jobs, migrations) with the flexibility of runtime Terminology Services for real-time scenarios.
+
+| Feature                           | Microsoft Original                  | Service Well Fork (FLC)                  |
+|----------------------------------|--------------------------------------|------------------------------------------|
+| Template Authoring               | Liquid templates                    | Liquid templates + IG package integration |
+| Terminology Translation          | Static mapping HL7 v2               | FHIR Terminology Service (Ontoserver) + static mapping JSON and XML |
+| Dependency Management            | Local JSON mappings                 | Declarative via `flc-config.yaml` (to do) + automated Terminology checks |
+| Package Model                    | Standalone templates                | Templates as part of IG FHIR Packages (npm) |
+| Target Audience                  | Azure-integrated environments       | Vendor-neutral, IG-centered environments (regions, hospitals, public sector) |
+
+---
 
 ## Deployment
 
-You can deploy the FHIR converter API using the instructions found [here](/docs/how-to-guides/deployment-options.md).  The default deployment will deploy the FHIR Conventer API container hosted on Azure Container Apps.
+The converter logic is designed for flexible integration:
 
-## API
+- Use as a library within your .NET projects.
+- Integrate with existing CI/CD pipelines.
+- Optional containerization for hosted services (no vendor lock-in).
 
-The conversion APIs process the provided input data of the specified format and use the specified Liquid template (default or custom) and return the converted result as per the transformations in the template.
+---
 
-![Convert API summary](docs/images/convert-api-summary.png)
+## Security
 
-Complete details on the FHIR converter APIs and examples can be found [here](/docs/how-to-guides/use-convert-web-apis.md).
+For security information and how to report vulnerabilities, please see [SECURITY.md](SECURITY.md).
 
-## Troubleshooting
+---
 
-Some key concepts to consider:
-* Processing time is related to both the input message size, template, and logic contained in the template.  If your template is taking a long time to execute make sure you don't have any unnecessary loops.
-* The output of the template is expected to be JSON when the target is FHIR.
-* When converting data to FHIR, [post processing](https://github.com/microsoft/FHIR-Converter/blob/main/src/Microsoft.Health.Fhir.Liquid.Converter/OutputProcessors/PostProcessor.cs) is performed.  If you are seeing unexpected results, double check the post processing logic. 
-* If you want a deeper understanding on how data is converted, look at the functional tests found [here](https://github.com/microsoft/FHIR-Converter/blob/main/src/Microsoft.Health.Fhir.Liquid.Converter.FunctionalTests/ConvertDataTemplateCollectionProviderFunctionalTests.cs)
-
-Detailed troubleshooting options for your deployed FHIR converter API can be found [here](docs/how-to-guides/troubleshoot.md).
-
-## Previous Versions
-Detailed documentation of prior Converter release is covered in the table below.
-
-|  Version | Summary | 
-| ----- |  ----- |
-| [5.x Liquid](https://github.com/microsoft/FHIR-Converter/tree/e49b56f165e5607726063c681e90a28e68e39133) | Liquid engine release covers: <br> 1. HL7v2, CCDA, and JSON to FHIR transformations. <br> 2. Command Line utility. <br> 3. VS Code authoring extension. <br> 4. FHIR Service $convert integration. <br> 5. ACR template storage. |
-| [3.x Handlebars](https://github.com/microsoft/FHIR-Converter/tree/handlebars) | Previous handlebars base solution.  No longer supported. See full comparision [here](https://github.com/microsoft/FHIR-Converter/tree/e49b56f165e5607726063c681e90a28e68e39133?tab=readme-ov-file#fhir-converter).
-
-## External resources
+## External Resources
 
 - [DotLiquid wiki](https://github.com/dotliquid/dotliquid/wiki)
 - [Liquid wiki](https://github.com/Shopify/liquid/wiki)
-- [HL7 Community 2-To-FHIR-Project](https://confluence.hl7.org/display/OO/2-To-FHIR+Project)
- 
+- [HL7 Community 2-To-FHIR Project](https://confluence.hl7.org/display/OO/2-To-FHIR+Project)
+
+---
+
 ## Contributing
 
-This project welcomes contributions and suggestions.  Most contributions require you to agree to a
-Contributor License Agreement (CLA) declaring that you have the right to, and actually do, grant us
-the rights to use your contribution. For details, visit [the CLA site](https://cla.opensource.microsoft.com).
+Contributions and suggestions are welcome!
 
-When you submit a pull request, a CLA bot will automatically determine whether you need to provide
-a CLA and decorate the PR appropriately (e.g., status check, comment). Simply follow the instructions
-provided by the bot. You will only need to do this once across all repos using our CLA.
+Please submit pull requests or issues via GitHub. All contributions should respect the project's license and code of conduct.
 
-This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/).
-For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or
-contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for more details.

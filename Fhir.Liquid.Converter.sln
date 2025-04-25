@@ -26,8 +26,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{D00221FC-4
 	ProjectSection(SolutionItems) = preProject
 		data\SampleData\Tirs\codevalue.json = data\SampleData\Tirs\codevalue.json
 		data\SampleData\Tirs\codevalueset.json = data\SampleData\Tirs\codevalueset.json
-		data\Templates\Tirsv1\CodevaluesetToFhir.liquid = data\Templates\Tirsv1\CodevaluesetToFhir.liquid
-		data\Templates\Tirsv1\TestToFhir1.liquid = data\Templates\Tirsv1\TestToFhir1.liquid
 		data\Templates\Tirsv1\Test.liquid = data\Templates\Tirsv1\Test.liquid
 	EndProjectSection
 EndProject

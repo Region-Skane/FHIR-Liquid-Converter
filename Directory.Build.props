@@ -1,17 +1,17 @@
 <Project>
 
-  <!--Product related property configurations-->
+  <!-- Product related property configurations -->
   <PropertyGroup>
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
-    <Authors>Microsoft Health Team</Authors>
-    <Company>Microsoft Corporation</Company>
-    <Copyright>Copyright © Microsoft Corporation. All rights reserved.</Copyright>
+    <Authors>Service Well AB</Authors>
+    <Company>Service Well AB</Company>
+    <Copyright>Copyright © Service Well AB. All rights reserved.</Copyright>
     <Deterministic>true</Deterministic>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <Product>Microsoft Health</Product>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <Product>Service Well Health</Product>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <RepoRootPath>$(MSBuildThisFileDirectory)</RepoRootPath>
-	  <LatestFramework>net8.0</LatestFramework>  
+    <LatestFramework>net8.0</LatestFramework>  
   </PropertyGroup>
 
   <PropertyGroup>
@@ -27,7 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="$(RepoRootPath)NOTICE" Pack="true" PackagePath="" Visible="false" Condition=" Exists('$(RepoRootPath)NOTICE') " />
+    <None Include="$(RepoRootPath)NOTICE" Pack="true" PackagePath="" Visible="false" Condition="Exists('$(RepoRootPath)NOTICE')" />
   </ItemGroup>
 
 </Project>

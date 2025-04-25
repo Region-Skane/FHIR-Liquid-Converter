@@ -1,9 +1,13 @@
-# Microsoft Open Source Code of Conduct
+# Code of Conduct
 
-This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/).
+This project and its community are governed by the [Contributor Covenant Code of Conduct](https://www.contributor-covenant.org/version/2/1/code_of_conduct/).  
+By participating, you are expected to uphold this code.
 
-Resources:
+If you observe unacceptable behavior, please report it to:
 
-- [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/)
-- [Microsoft Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/)
-- Contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with questions or concerns
+📧 **support@servicewell.se**
+
+## Resources
+
+- [Contributor Covenant Homepage](https://www.contributor-covenant.org)
+- [FAQ](https://www.contributor-covenant.org/faq)

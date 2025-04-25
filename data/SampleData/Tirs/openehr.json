@@ -1,9 +1,0 @@
-{
-    "lab_result_clinical_chemistryuid": "32335bd1-9a61-4df0-8c00-ff9be23a6c4e::example::1",
-    "lab_result_clinical_chemistry/context/report_id": "Rapport-id 18",
-    "lab_result_clinical_chemistry/context/care_unit/name": "Namn 21",
-    "lab_result_clinical_chemistry/context/care_unit/identifier:0": "2c73081f-9ce0-47f4-ae6b-27f5843a1c43",
-    "lab_result_clinical_chemistry/context/care_unit/identifier:0|issuer": "Issuer",
-    "lab_result_clinical_chemistry/context/care_unit/identifier:0|assigner": "Assigner",
-    "lab_result_clinical_chemistry/context/care_unit/identifier:0|type": "Prescription" 
-}

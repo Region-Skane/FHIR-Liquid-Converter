@@ -1,20 +1,25 @@
-NOTICES AND INFORMATION
+NOTICES AND INFORMATION  
 Do Not Translate or Localize
 
-This software incorporates material from third parties.
-Microsoft makes certain open source code available at https://3rdpartysource.microsoft.com,
-or you may send a check or money order for US $5.00, including the product name,
-the open source component name, platform, and version number, to:
+This software includes third-party components licensed under various open source licenses as listed below.
 
-Source Code Compliance Team
-Microsoft Corporation
-One Microsoft Way
-Redmond, WA 98052
-USA
+You may obtain copies of these licenses from:
+- Apache License, Version 2.0: http://www.apache.org/licenses/LICENSE-2.0
+- MIT License: https://opensource.org/licenses/MIT
+- Microsoft Public License (Ms-PL): https://opensource.org/licenses/MS-PL
 
-Notwithstanding any other terms, you may reverse engineer this software to the extent
-required to debug changes to any libraries licensed under the GNU Lesser General Public License.
+The following third-party components are included.  
+Each component is provided under its respective license as stated below.  
+Service Well AB does not claim ownership of these third-party components.
 
+---------------------------------------------------------
+Microsoft FHIR Converter - MIT License
+
+Copyright (c) Microsoft Corporation
+
+Licensed under the MIT License. See LICENSE in the repo root for license information.
+
+https://github.com/microsoft/FHIR-Converter
 ---------------------------------------------------------
 
 Castle.Core 4.4.0 - Apache-2.0

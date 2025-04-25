@@ -2,6 +2,8 @@
 
 # CS3021: Type or member does not need a CLSCompliant attribute because the assembly does not have a CLSCompliant attribute
 dotnet_diagnostic.CS3021.severity = none
+#SA1636 Dont use stylecop for licenceheader, we use LicenceHeaderDefinition
+dotnet_diagnostic.SA1636.severity = none 
 csharp_indent_labels = one_less_than_current
 csharp_using_directive_placement = outside_namespace:silent
 csharp_prefer_simple_using_statement = true:suggestion
