@@ -19,7 +19,7 @@ steps:
 
   - script: |
       git fetch upstream
-      git merge upstream/public/main --ff-only
+      git merge upstream/public/main --allow-unrelated-histories
     displayName: Fetch and fast-forward merge Github main branch 
 
   - script: |
