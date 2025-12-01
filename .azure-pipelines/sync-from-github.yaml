@@ -1,1 +1,27 @@
-trigger:
+# .azure-pipelines/sync-from-github.yaml
+
+schedules:
+  - cron: 0 3 */2 * * # At 03:00 UTC on every 2nd day-of-month.
+    displayName: At 03:00 UTC on every 2nd day-of-month.
+    always: true
+    branches:
+     include:
+       - public/main
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+  - checkout: self
+
+  - script: git remote add upstream https://github.com/servicewell/FHIR-Liquid-Converter.git
+    displayName: Add public Github repo as remote
+
+  - script: |
+      git fetch upstream
+      git merge upstream/public/main --ff-only
+    displayName: Fetch and fast-forward merge Github main branch 
+
+  - script: |
+      git push origin HEAD:public/main
+    displayName: "Push merged changes back to Azure DevOps"
