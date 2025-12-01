@@ -13,6 +13,7 @@ pool:
 
 steps:
   - checkout: self
+    persistCredentials: true
 
   - script: git remote add upstream https://github.com/servicewell/FHIR-Liquid-Converter.git
     displayName: Add public Github repo as remote
