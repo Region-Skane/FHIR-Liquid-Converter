@@ -1,0 +1,23 @@
+name: Sync with gh repo sync
+
+on:
+  schedule:
+    - cron: "0 3 */2 * *"  # At 03:00 on every 2nd day.
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install GitHub CLI
+        uses: cli/cli-action@v2
+      - name: Sync default branch from upstream
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Sync remote fork from its parent (no checkout needed)
+          gh repo sync "${GITHUB_REPOSITORY}"
+        
