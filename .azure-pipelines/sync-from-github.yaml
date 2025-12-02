@@ -1,0 +1,29 @@
+# .azure-pipelines/sync-from-github.yaml
+# Sync this Azure DevOps repo from GitHub upstream on a schedule.
+
+schedules:
+  - cron: "0 3 * * *" # every day at 03:00 UTC
+    displayName: "Sync from GitHub"
+    always: true
+    branches:
+      include:
+        - public/main
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+  - checkout: self
+    persistCredentials: true
+
+  - script: git remote add upstream https://github.com/Region-Skane/FHIR-Liquid-Converter.git
+    displayName: "Add GitHub repo as upstream"
+
+  - script: |
+      git fetch upstream
+      git merge upstream/main --ff-only
+    displayName: "Fetch and fast-forward merge from GitHub"
+
+  - script: |
+      git push origin HEAD:public/main
+    displayName: "Push merged changes back to Azure DevOps"
