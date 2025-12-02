@@ -20,6 +20,9 @@ steps:
     displayName: "Add GitHub repo as upstream"
 
   - script: |
+      git config user.email "automation-pipeline@skane.se"
+      git config user.name "Automation Pipeline"
+
       git fetch upstream
       git merge upstream/public/main --allow-unrelated-histories
     displayName: "Fetch and fast-forward merge from GitHub"
