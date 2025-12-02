@@ -27,7 +27,7 @@ steps:
       git config user.name "Automation Pipeline"
 
       git fetch upstream
-      git merge upstream/public/main --allow-unrelated-histories
+      git merge upstream/public/main --ff-only
     displayName: "Fetch and fast-forward merge from GitHub"
 
   - script: |
