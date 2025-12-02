@@ -21,7 +21,7 @@ steps:
 
   - script: |
       git fetch upstream
-      git merge upstream/main --ff-only
+      git merge upstream/public/main --ff-only
     displayName: "Fetch and fast-forward merge from GitHub"
 
   - script: |
