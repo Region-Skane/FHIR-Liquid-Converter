@@ -1,0 +1,21 @@
+name: Sync with gh repo sync
+
+on:
+  schedule:
+    - cron: "0 3 * * *"  # At 03:00 on every day.
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Sync default branch from upstream
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Sync remote fork from its parent (no checkout needed)
+          gh repo sync "${GITHUB_REPOSITORY}"
+        
