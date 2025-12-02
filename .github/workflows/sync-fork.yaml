@@ -2,7 +2,7 @@ name: Sync with gh repo sync
 
 on:
   schedule:
-    - cron: "0 3 */2 * *"  # At 03:00 on every 2nd day.
+    - cron: "0 3 * * *"  # At 03:00 on every day.
   workflow_dispatch:
 
 permissions:
