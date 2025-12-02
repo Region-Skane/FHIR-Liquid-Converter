@@ -1,6 +1,9 @@
 # .azure-pipelines/sync-from-github.yaml
 # Sync this Azure DevOps repo from GitHub upstream on a schedule.
 
+trigger: none
+pr: none
+
 schedules:
   - cron: "0 3 * * *" # every day at 03:00 UTC
     displayName: "Sync from GitHub"
