@@ -5,7 +5,7 @@ trigger: none
 pr: none
 
 schedules:
-  - cron: "0 3 * * *" # every day at 03:00 UTC
+  - cron: "0 3 * * *"
     displayName: "Sync from GitHub"
     always: true
     branches:
@@ -18,18 +18,29 @@ pool:
 steps:
   - checkout: self
     persistCredentials: true
-
-  - script: git remote add upstream https://github.com/Region-Skane/FHIR-Liquid-Converter.git
-    displayName: "Add GitHub repo as upstream"
+    fetchDepth: 0
 
   - script: |
+      set -euo pipefail
+
       git config user.email "automation-pipeline@skane.se"
       git config user.name "Automation Pipeline"
 
-      git fetch upstream
-      git merge upstream/public/main --ff-only
-    displayName: "Fetch and fast-forward merge from GitHub"
+      # Ensure we're actually on the branch we intend to update
+      git checkout public/main
 
-  - script: |
-      git push origin HEAD:public/main
-    displayName: "Push merged changes back to Azure DevOps"
+      # Make sure we are based on latest origin/public/main (prevents push rejection & weird states)
+      git fetch origin public/main
+      git reset --hard origin/public/main
+
+      # Add upstream (idempotent)
+      git remote get-url upstream >/dev/null 2>&1 || \
+        git remote add upstream https://github.com/Region-Skane/FHIR-Liquid-Converter.git
+
+      # Fetch upstream and fast-forward
+      git fetch upstream public/main
+      git merge --ff-only upstream/public/main
+
+      # Push back
+      git push origin public/main
+    displayName: "Sync origin/public/main from upstream/public/main"
