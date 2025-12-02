@@ -12,8 +12,6 @@ jobs:
   sync:
     runs-on: ubuntu-latest
     steps:
-      - name: Install GitHub CLI
-        uses: cli/cli-action@v2
       - name: Sync default branch from upstream
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
