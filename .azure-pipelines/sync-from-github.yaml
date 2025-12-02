@@ -23,24 +23,50 @@ steps:
   - script: |
       set -euo pipefail
 
+      echo "========== Sync: start =========="
+      date -u
+      echo ""
+
+      echo "==> Configure git identity"
       git config user.email "automation-pipeline@skane.se"
       git config user.name "Automation Pipeline"
+      git config --list | grep -E '^user\.(name|email)=' || true
+      echo ""
 
-      # Ensure we're actually on the branch we intend to update
+      echo "==> Remotes"
+      git remote -v || true
+      echo ""
+
+      echo "==> Checkout target branch: public/main"
       git checkout public/main
+      echo "HEAD: $(git rev-parse --short HEAD)  |  $(git log -1 --pretty=format:%s)"
+      echo ""
 
-      # Make sure we are based on latest origin/public/main (prevents push rejection & weird states)
+      echo "==> Update from origin/public/main"
       git fetch origin public/main
       git reset --hard origin/public/main
+      echo "After reset -> HEAD: $(git rev-parse --short HEAD)  |  $(git log -1 --pretty=format:%s)"
+      echo ""
 
-      # Add upstream (idempotent)
+      echo "==> Ensure upstream remote exists"
       git remote get-url upstream >/dev/null 2>&1 || \
         git remote add upstream https://github.com/Region-Skane/FHIR-Liquid-Converter.git
+      echo "upstream: $(git remote get-url upstream)"
+      echo ""
 
-      # Fetch upstream and fast-forward
+      echo "==> Fetch upstream/public/main"
       git fetch upstream public/main
-      git merge --ff-only upstream/public/main
+      echo "upstream/public/main: $(git rev-parse --short upstream/public/main)"
+      echo ""
 
-      # Push back
+      echo "==> Fast-forward merge from upstream/public/main"
+      git merge --ff-only upstream/public/main
+      echo "After merge -> HEAD: $(git rev-parse --short HEAD)  |  $(git log -1 --pretty=format:%s)"
+      echo ""
+
+      echo "==> Push to origin public/main"
       git push origin public/main
+      echo ""
+
+      echo "========== Sync: done =========="
     displayName: "Sync origin/public/main from upstream/public/main"
