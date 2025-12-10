@@ -1,4 +1,4 @@
-﻿// -------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License (MIT). See LICENSE in the repo root for license information.
 //
@@ -12,6 +12,7 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using CommandLine;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Health.Fhir.Liquid.Converter.Tool.Configuration;
 using Microsoft.Health.Fhir.Liquid.Converter.Tool.Models;
 
 namespace Microsoft.Health.Fhir.Liquid.Converter.Tool
@@ -29,12 +30,13 @@ namespace Microsoft.Health.Fhir.Liquid.Converter.Tool
                 Console.ReadLine();
             }
 #endif
-            var parseResult = Parser.Default.ParseArguments<ConverterOptions, PullTemplateOptions, PushTemplateOptions>(args);
+            var parseResult = Parser.Default.ParseArguments<ConverterOptions, PullTemplateOptions, PushTemplateOptions, PackageManagementOptions>(args);
             try
             {
                 parseResult.WithParsed<ConverterOptions>(ConverterLogicHandler.Convert);
                 await parseResult.WithParsedAsync<PullTemplateOptions>(TemplateManagementLogicHandler.PullAsync);
                 await parseResult.WithParsedAsync<PushTemplateOptions>(TemplateManagementLogicHandler.PushAsync);
+                await parseResult.WithParsedAsync<PackageManagementOptions>(PackageManagementLogicHandler.ImportPackageAsync);
                 parseResult.WithNotParsed(HandleOptionsParseError);
                 return 0;
             }
@@ -47,14 +49,7 @@ namespace Microsoft.Health.Fhir.Liquid.Converter.Tool
 
         private static AppSettings GetAppSettings()
         {
-            var environment = Environment.GetEnvironmentVariable("DOTNET_ENVIRONMENT");
-
-            IConfiguration configuration = new ConfigurationBuilder()
-                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: false)
-                .AddJsonFile($"appsettings.{environment}.json", optional: true, reloadOnChange: false)
-                .AddEnvironmentVariables()
-                .Build();
-
+            var configuration = ConfigurationHelper.BuildConfiguration();
             return configuration.Get<AppSettings>();
         }
 
