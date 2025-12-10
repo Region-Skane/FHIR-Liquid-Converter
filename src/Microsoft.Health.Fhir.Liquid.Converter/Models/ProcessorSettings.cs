@@ -1,4 +1,4 @@
-﻿// -------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License (MIT). See LICENSE in the repo root for license information.
 // -------------------------------------------------------------------------------------------------
@@ -18,5 +18,8 @@ namespace Microsoft.Health.Fhir.Liquid.Converter.Models
 
         // Allow output validation errors, ie bad json. Will return the raw output.
         public bool AllowOutputValidationErrors { get; set; } = false;
+
+        // Output Fhir Serialization Format, eg Json (Default) or Xml
+        public FhirSerializationFormat SerializationFormat { get; set; } = FhirSerializationFormat.Json;
     }
 }
