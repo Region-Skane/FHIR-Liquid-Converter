@@ -1,4 +1,7 @@
-﻿using System;
+// -------------------------------------------------------------------------------------------------
+// Copyright (c) Service Well AB.
+// Modifications licensed under the Apache License, Version 2.0. See LICENSE in the repo root.
+// -------------------------------------------------------------------------------------------------
 using Microsoft.Extensions.Logging;
 using Microsoft.Health.Fhir.Liquid.Converter.Models;
 using Microsoft.Health.Fhir.Liquid.Converter.Parsers;
