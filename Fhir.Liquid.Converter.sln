@@ -33,6 +33,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FLC.PackageManagement", "sr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FLC.PackageManagement.Persistence", "src\FLC.PackageManagement.Persistence\FLC.PackageManagement.Persistence.csproj", "{2E659798-CAF1-D237-98D3-D1C5CD8714B4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FLC.PackageManagement.UnitTests", "src\FLC.PackageManagement.UnitTests\FLC.PackageManagement.UnitTests.csproj", "{B0D0A921-45F6-B2C3-0446-6F0D5B48752F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -75,6 +77,10 @@ Global
 		{2E659798-CAF1-D237-98D3-D1C5CD8714B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2E659798-CAF1-D237-98D3-D1C5CD8714B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2E659798-CAF1-D237-98D3-D1C5CD8714B4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B0D0A921-45F6-B2C3-0446-6F0D5B48752F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B0D0A921-45F6-B2C3-0446-6F0D5B48752F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B0D0A921-45F6-B2C3-0446-6F0D5B48752F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B0D0A921-45F6-B2C3-0446-6F0D5B48752F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
