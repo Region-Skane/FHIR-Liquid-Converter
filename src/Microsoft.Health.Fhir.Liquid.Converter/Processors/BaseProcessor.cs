@@ -1,4 +1,4 @@
-﻿// -------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License (MIT). See LICENSE in the repo root for license information.
 // -------------------------------------------------------------------------------------------------
@@ -13,12 +13,11 @@ using EnsureThat;
 using Microsoft.Extensions.Logging;
 using Microsoft.Health.Fhir.Liquid.Converter.Exceptions;
 using Microsoft.Health.Fhir.Liquid.Converter.Models;
+using Microsoft.Health.Fhir.Liquid.Converter.OutputFormatters;
 using Microsoft.Health.Fhir.Liquid.Converter.OutputProcessors;
 using Microsoft.Health.Fhir.Liquid.Converter.Utilities;
 using Microsoft.Health.MeasurementUtility;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using ServiceWell.Health.Fhir.Liquid.Converter;
 
 namespace Microsoft.Health.Fhir.Liquid.Converter.Processors
 {
@@ -149,7 +148,9 @@ namespace Microsoft.Health.Fhir.Liquid.Converter.Processors
 
             CreateTraceInfo(data, context, traceInfo);
 
-            return result.ToString(Formatting.Indented);
+            // Step: Format fhir to Json or Xml
+            var formatter = OutputFormatterFactory.Create(Settings.SerializationFormat);
+            return formatter.Format(result);
         }
 
         protected string RenderTemplates(Template template, Context context)

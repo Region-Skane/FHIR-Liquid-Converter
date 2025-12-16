@@ -23,7 +23,7 @@ public sealed class SqliteDatabaseInitializer : IDatabaseInitializer
 
     public async Task InitializeAsync(CancellationToken ct)
     {
-        _logger.LogInformation("Initializing SQLite database...");
+        _logger.LogDebug("Initializing SQLite database...");
 
         using var connection = _dbConnectionFactory.CreateConnection();
 
@@ -45,7 +45,7 @@ public sealed class SqliteDatabaseInitializer : IDatabaseInitializer
 
         await connection.ExecuteAsync(sql, commandTimeout: 60);
 
-        _logger.LogInformation("SQLite database initialized.");
+        _logger.LogDebug("SQLite database initialized.");
     }
 
     private static async Task<string> LoadEmbeddedSqlAsync(string relativePath, CancellationToken ct)

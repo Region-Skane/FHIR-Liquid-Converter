@@ -134,15 +134,23 @@ public class ExtractService : IExtractService
             throw new InvalidOperationException("No EntryTemplate available.");
         }
 
+        var firstEntryTemplate = entryTemplates.FirstOrDefault();
+
         // Some post processing is required for applying StorageRoot. We need data from IG and StructureMap, which may not be available ehen LibraryItem was created.
         var libraryRoot = JsonDocument.Parse(libraryItem.Json).RootElement;
 
         // TODO: We currently assume that all StructureMaps have the same folder paths, so we just take the first one.
-        var entryTemplateFolder = FindFolderPathByLogicalFilename(libraryRoot, entryTemplates.FirstOrDefault());
+        var entryTemplateFolder = FindFolderPathByLogicalFilename(libraryRoot, firstEntryTemplate);
 
         if (string.IsNullOrWhiteSpace(entryTemplateFolder))
         {
-            throw new InvalidDataException("No folder path available for entry template.");
+            throw new InvalidDataException(
+                "No folder path available for entry template. " +
+                $"Library.content[*].extension[*].extension[*] must contain a matching 'folder-path' extension " +
+                $"for the logical filename '{firstEntryTemplate}'.\n" +
+                "Expected format inside each inner extension array is:\n" +
+                " - an element with url = 'logical-filename' and valueString = '<entry template file name>'\n" +
+                " - an element with url = 'folder-path' and valueString = '<relative folder path>'\n");
         }
 
         libraryItem = LibraryItem.CreateFrom(

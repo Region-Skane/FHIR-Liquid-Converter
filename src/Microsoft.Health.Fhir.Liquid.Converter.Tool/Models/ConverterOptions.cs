@@ -1,4 +1,4 @@
-﻿// -------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License (MIT). See LICENSE in the repo root for license information.
 // -------------------------------------------------------------------------------------------------
@@ -39,5 +39,14 @@ namespace Microsoft.Health.Fhir.Liquid.Converter.Tool.Models
 
         [Option('a', "AllowOutputValidationErrors", Required = false, HelpText = "Allow output validation errors and return the raw output if validation fails. By default, validation errors will cause the process to fail.")]
         public bool AllowOutputValidationErrors { get; set; } = false;
+
+        [Option('s', "SerializationFormat", Required = false, HelpText = "FHIR serialization format: json or xml. Default is json.")]
+        public string SerializationFormat { get; set; } = "json";
+
+        [Option("RawOutputOnly", Required = false, HelpText = "If set (--RawOutputOnly true), save the raw transformed FHIR payload on success. On error, save a '.error' file containing status, error message and raw output. Default is false.")]
+        public bool? RawOutputOnly { get; set; }
+
+        [Option("ContinueOnError", Required = false, HelpText = "If set (--ContinueOnError true), batch conversion will continue even if individual files fail. Errors are logged and written to .error files. Default is false.")]
+        public bool? ContinueOnError { get; set; }
     }
 }
