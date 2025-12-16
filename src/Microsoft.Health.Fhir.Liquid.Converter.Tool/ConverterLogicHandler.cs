@@ -1,4 +1,4 @@
-﻿// -------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License (MIT). See LICENSE in the repo root for license information.
 // -------------------------------------------------------------------------------------------------
@@ -35,42 +35,70 @@ namespace Microsoft.Health.Fhir.Liquid.Converter.Tool
             var templateProvider = CreateTemplateProvider(dataType, options.TemplateDirectory);
             DefaultProcessorSettings.EnableTelemetryLogger = options.IsVerboseEnabled;
             DefaultProcessorSettings.AllowOutputValidationErrors = options.AllowOutputValidationErrors;
+            DefaultProcessorSettings.SerializationFormat = ParseSerializationFormat(options.SerializationFormat);
+
+            bool rawOutput = options.RawOutputOnly ?? false;
 
             if (!string.IsNullOrEmpty(options.InputDataContent))
             {
-                ConvertSingleFile(dataProcessor, templateProvider, dataType, options.RootTemplate, options.InputDataContent, options.OutputDataFile, options.IsTraceInfo);
+                ConvertSingleFile(dataProcessor, templateProvider, dataType, options.RootTemplate, options.InputDataContent, options.OutputDataFile, options.IsTraceInfo, rawOutput);
             }
             else if (!string.IsNullOrEmpty(options.InputDataFile))
             {
                 var fileContent = File.ReadAllText(options.InputDataFile);
-                ConvertSingleFile(dataProcessor, templateProvider, dataType, options.RootTemplate, fileContent, options.OutputDataFile, options.IsTraceInfo);
+                ConvertSingleFile(dataProcessor, templateProvider, dataType, options.RootTemplate, fileContent, options.OutputDataFile, options.IsTraceInfo, rawOutput);
             }
             else
             {
-                ConvertBatchFiles(dataProcessor, templateProvider, dataType, options.RootTemplate, options.InputDataFolder, options.OutputDataFolder, options.IsTraceInfo);
+                bool continueBatchOnError = options.ContinueOnError ?? false;
+                ConvertBatchFiles(dataProcessor, templateProvider, dataType, options.RootTemplate, options.InputDataFolder, options.OutputDataFolder, options.IsTraceInfo, rawOutput, continueBatchOnError);
             }
 
             Console.WriteLine($"Conversion completed!");
         }
 
-        private static void ConvertSingleFile(IFhirConverter dataProcessor, ITemplateProvider templateProvider, DataType dataType, string rootTemplate, string inputContent, string outputFile, bool isTraceInfo)
+        private static void ConvertSingleFile(IFhirConverter dataProcessor, ITemplateProvider templateProvider, DataType dataType, string rootTemplate, string inputContent, string outputFile, bool isTraceInfo, bool rawOutputOnly)
         {
             var traceInfo = CreateTraceInfo(dataType, isTraceInfo);
             ConverterResult result = null;
+            string rawResultString = null;
+
             try
             {
-                var resultString = dataProcessor.Convert(inputContent, rootTemplate, templateProvider, traceInfo);
-                result = new ConverterResult(ProcessStatus.OK, resultString, traceInfo);
+                // We get raw output – can be json or xml
+                rawResultString = dataProcessor.Convert(inputContent, rootTemplate, templateProvider, traceInfo);
+
+                if (rawOutputOnly || DefaultProcessorSettings.SerializationFormat == FhirSerializationFormat.Json)
+                {
+                    // Raw output or json
+                    result = new ConverterResult(ProcessStatus.OK, rawResultString, traceInfo);
+                }
+                else if (DefaultProcessorSettings.SerializationFormat == FhirSerializationFormat.Xml)
+                {
+                    // Wrap xml in json object to make FhirResource allowed
+                    var wrapper = new { format = "xml", resource = rawResultString, };
+                    var wrappedJson = JsonConvert.SerializeObject(wrapper);
+                    result = new ConverterResult(ProcessStatus.OK, wrappedJson, traceInfo);
+                }
             }
             catch (PostprocessException pex) when (DefaultProcessorSettings.AllowOutputValidationErrors) // catch and set a ConverterResult only when AllowOutputValidationErrors==true
             {
                 result = new ConverterResult(ProcessStatus.OutputValidationError, pex.RawOutputString, traceInfo, pex.Message);
             }
 
-            SaveConverterResult(outputFile, result);
+            if (rawOutputOnly)
+            {
+                // Save raw output (json or xml)
+                SaveRawOutputOnly(outputFile, result, rawResultString);
+            }
+            else
+            {
+                // Save json with ConverterResult wrapper
+                SaveConverterResult(outputFile, result);
+            }
         }
 
-        private static void ConvertBatchFiles(IFhirConverter dataProcessor, ITemplateProvider templateProvider, DataType dataType, string rootTemplate, string inputFolder, string outputFolder, bool isTraceInfo)
+        private static void ConvertBatchFiles(IFhirConverter dataProcessor, ITemplateProvider templateProvider, DataType dataType, string rootTemplate, string inputFolder, string outputFolder, bool isTraceInfo, bool rawOutputOnly, bool continueOnError)
         {
             var files = GetInputFiles(dataType, inputFolder);
             foreach (var file in files)
@@ -78,8 +106,26 @@ namespace Microsoft.Health.Fhir.Liquid.Converter.Tool
                 Console.WriteLine($"Processing {Path.GetFullPath(file)}");
                 var fileContent = File.ReadAllText(file);
                 var outputFileDirectory = Path.Join(outputFolder, Path.GetRelativePath(inputFolder, Path.GetDirectoryName(file)));
-                var outputFilePath = Path.Join(outputFileDirectory, Path.GetFileNameWithoutExtension(file) + ".json");
-                ConvertSingleFile(dataProcessor, templateProvider, dataType, rootTemplate, fileContent, outputFilePath, isTraceInfo);
+                var extension = rawOutputOnly ? "." + DefaultProcessorSettings.SerializationFormat.ToString().ToLower() : ".json"; // Only use SerializationFormat as output file format for raw output. Otherwise all formats will be wrapped in json.
+                var outputFilePath = Path.Join(outputFileDirectory, Path.GetFileNameWithoutExtension(file) + extension);
+                try
+                {
+                    ConvertSingleFile(dataProcessor, templateProvider, dataType, rootTemplate, fileContent, outputFilePath, isTraceInfo, rawOutputOnly);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"ERROR converting file '{file}': {ex.Message}");
+                    if (continueOnError)
+                    {
+                        var result = new ConverterResult(ProcessStatus.Fail, fhirResource: null, traceInfo: null, errorMessage: ex.Message);
+                        SaveRawOutputOnly(outputFilePath, result, resultString: null);
+                        continue; // Continue batch
+                    }
+
+                    // Stop batch
+                    Console.WriteLine($"Batch is stopped on file '{file}'");
+                    throw;
+                }
             }
         }
 
@@ -154,6 +200,28 @@ namespace Microsoft.Health.Fhir.Liquid.Converter.Tool
             File.WriteAllText(outputFilePath, content);
         }
 
+        private static void SaveRawOutputOnly(string outputFilePath, ConverterResult result, string resultString)
+        {
+            result ??= new ConverterResult(ProcessStatus.Fail, "ConverterResult was null when RawOutputOnly was requested.", traceInfo: null);
+            var outputFileDirectory = Path.GetDirectoryName(outputFilePath);
+            Directory.CreateDirectory(outputFileDirectory);
+
+            // On success → write the raw transformationen (json or xml) to output file
+            if (result.Status == ProcessStatus.OK)
+            {
+                File.WriteAllText(outputFilePath, resultString ?? string.Empty);
+            }
+            else
+            {
+                // On error → write .error file containing status + error + rawOutput
+                var errorPath = outputFilePath + ".error";
+                var errorPayload = new { result.Status, result.ErrorMessage, result.RawOutput, };
+
+                var content = JsonConvert.SerializeObject(errorPayload, Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+                File.WriteAllText(errorPath, content);
+            }
+        }
+
         private static bool IsValidOptions(ConverterOptions options)
         {
             var contentToFile = !string.IsNullOrEmpty(options.InputDataContent) &&
@@ -192,6 +260,21 @@ namespace Microsoft.Health.Fhir.Liquid.Converter.Tool
                 .TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
 
             return string.Equals(inputFolderPath, outputFolderPath, StringComparison.InvariantCultureIgnoreCase);
+        }
+
+        private static FhirSerializationFormat ParseSerializationFormat(string format)
+        {
+            if (string.IsNullOrWhiteSpace(format))
+            {
+                return FhirSerializationFormat.Json;
+            }
+
+            return format.Trim().ToLowerInvariant() switch
+            {
+                "json" or "js" or "default" => FhirSerializationFormat.Json,
+                "xml" => FhirSerializationFormat.Xml,
+                _ => throw new InputParameterException($"Unsupported serialization format '{format}'. Valid values are: json, xml.")
+            };
         }
     }
 }

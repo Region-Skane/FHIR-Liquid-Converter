@@ -30,13 +30,16 @@ namespace Microsoft.Health.Fhir.Liquid.Converter.Tool
                 Console.ReadLine();
             }
 #endif
-            var parseResult = Parser.Default.ParseArguments<ConverterOptions, PullTemplateOptions, PushTemplateOptions, PackageManagementOptions>(args);
+            var parseResult = Parser.Default.ParseArguments<ConverterOptions, PullTemplateOptions, PushTemplateOptions,
+                PackageManagementOptions, PackageManagementListOptions, FlcConvertOptions>(args);
             try
             {
                 parseResult.WithParsed<ConverterOptions>(ConverterLogicHandler.Convert);
                 await parseResult.WithParsedAsync<PullTemplateOptions>(TemplateManagementLogicHandler.PullAsync);
                 await parseResult.WithParsedAsync<PushTemplateOptions>(TemplateManagementLogicHandler.PushAsync);
-                await parseResult.WithParsedAsync<PackageManagementOptions>(PackageManagementLogicHandler.ImportPackageAsync);
+                await parseResult.WithParsedAsync<PackageManagementOptions>(PackageManagementLogicHandler.ImportPackage);
+                await parseResult.WithParsedAsync<PackageManagementListOptions>(PackageManagementLogicHandler.ListPackages);
+                await parseResult.WithParsedAsync<FlcConvertOptions>(FlcConverterLogicHandler.FlcConvert);
                 parseResult.WithNotParsed(HandleOptionsParseError);
                 return 0;
             }
