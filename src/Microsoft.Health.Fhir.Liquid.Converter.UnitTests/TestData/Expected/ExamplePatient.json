@@ -1,6 +1,11 @@
-﻿{
+{
   "resourceType": "Patient",
   "id": "e8b835f7-0c46-4166-22ad-23e6783aaf54",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/StructureDefinition/Patient"
+    ]
+  },
   "identifier": [
     {
       "use": "usual",

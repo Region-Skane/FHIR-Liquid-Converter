@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.7.34009.444
+# Visual Studio Version 18
+VisualStudioVersion = 18.2.11415.280 d18.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microsoft.Health.Fhir.Liquid.Converter.Tool", "src\Microsoft.Health.Fhir.Liquid.Converter.Tool\Microsoft.Health.Fhir.Liquid.Converter.Tool.csproj", "{A9FCA2DD-E891-407D-BC34-048459D9CF74}"
 EndProject
@@ -34,6 +34,11 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FLC.PackageManagement.Persistence", "src\FLC.PackageManagement.Persistence\FLC.PackageManagement.Persistence.csproj", "{2E659798-CAF1-D237-98D3-D1C5CD8714B4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FLC.PackageManagement.UnitTests", "src\FLC.PackageManagement.UnitTests\FLC.PackageManagement.UnitTests.csproj", "{B0D0A921-45F6-B2C3-0446-6F0D5B48752F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Copilot", "Copilot", "{A46DDFFF-6020-4DC4-9DF3-9A4DEBB2C1CB}"
+	ProjectSection(SolutionItems) = preProject
+		.github\copilot-instructions.md = .github\copilot-instructions.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -87,6 +92,7 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{D00221FC-4B51-4460-B9D1-1DA13FE4CCF2} = {FB441B10-F38D-40E7-B2B4-D8424DA1D595}
+		{A46DDFFF-6020-4DC4-9DF3-9A4DEBB2C1CB} = {FB441B10-F38D-40E7-B2B4-D8424DA1D595}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {DF59726B-5E9A-43A5-B927-F2ECF15508AC}

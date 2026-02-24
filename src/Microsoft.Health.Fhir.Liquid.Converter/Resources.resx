@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -224,5 +224,8 @@
   </data>
   <data name="ValidateTagSyntaxError" xml:space="preserve">
     <value>Syntax Error in 'validate' tag - Valid syntax: validate [schema file].</value>
+  </data>
+  <data name="InvalidByProfileError" xml:space="preserve">
+    <value>{0}</value>
   </data>
 </root>
