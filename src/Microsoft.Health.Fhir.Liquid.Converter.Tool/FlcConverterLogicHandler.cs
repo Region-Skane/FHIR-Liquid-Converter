@@ -12,7 +12,6 @@ using FLC.PackageManagement.Persistence.Initialization;
 using FLC.PackageManagement.Persistence.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Health.Fhir.Liquid.Converter.Models;
 using Microsoft.Health.Fhir.Liquid.Converter.Tool.Configuration;
 using Microsoft.Health.Fhir.Liquid.Converter.Tool.Models;
 
@@ -62,14 +61,6 @@ internal static class FlcConverterLogicHandler
 
         var templatesRoot = templateInfo.TemplatesRoot;
         var entryTemplate = templateInfo.EntryTemplate;
-
-        // Build FhirConverter
-        var processorSettings = new ProcessorSettings
-        {
-            // IsTraceInfo = options.IsTraceInfo,
-            EnableTelemetryLogger = false,
-            AllowOutputValidationErrors = flcConvertOptions.AllowOutputValidationErrors,
-        };
 
         var converterOptions = flcConvertOptions.ToConverterOptions(templateInfo.TemplatesRoot, templateInfo.EntryTemplate);
 

@@ -12,6 +12,7 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using CommandLine;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Health.Fhir.Liquid.Converter.Exceptions;
 using Microsoft.Health.Fhir.Liquid.Converter.Tool.Configuration;
 using Microsoft.Health.Fhir.Liquid.Converter.Tool.Models;
 
@@ -42,6 +43,11 @@ namespace Microsoft.Health.Fhir.Liquid.Converter.Tool
                 await parseResult.WithParsedAsync<FlcConvertOptions>(FlcConverterLogicHandler.FlcConvert);
                 parseResult.WithNotParsed(HandleOptionsParseError);
                 return 0;
+            }
+            catch (PostprocessException ex)
+            {
+                Console.Error.WriteLine($"PostProcess failed: {ex.Message}");
+                return (int)ex.FhirConverterErrorCode;
             }
             catch (Exception ex)
             {
