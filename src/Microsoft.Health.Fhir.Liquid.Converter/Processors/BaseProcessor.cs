@@ -1,6 +1,9 @@
 // -------------------------------------------------------------------------------------------------
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License (MIT). See LICENSE in the repo root for license information.
+//
+// Copyright (c) Service Well AB.
+// Modifications licensed under the Apache License, Version 2.0. See LICENSE in the repo root.
 // -------------------------------------------------------------------------------------------------
 
 using System;
@@ -143,7 +146,7 @@ namespace Microsoft.Health.Fhir.Liquid.Converter.Processors
             using (ITimed postProcessTime =
                 Performance.TrackDuration(duration => LogTelemetry(FhirConverterMetrics.PostProcessDuration, duration)))
             {
-                result = PostProcessor.Process(rawResult, Settings.AllowOutputValidationErrors);
+                result = PostProcessor.Process(rawResult, Settings);
             }
 
             CreateTraceInfo(data, context, traceInfo);

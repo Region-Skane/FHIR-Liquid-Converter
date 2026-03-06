@@ -1,13 +1,15 @@
 // -------------------------------------------------------------------------------------------------
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License (MIT). See LICENSE in the repo root for license information.
+//
+// Copyright (c) Service Well AB.
+// Modifications licensed under the Apache License, Version 2.0. See LICENSE in the repo root.
 // -------------------------------------------------------------------------------------------------
 
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Microsoft.Extensions.Logging;
 using Microsoft.Health.Fhir.Liquid.Converter.Exceptions;
 using Microsoft.Health.Fhir.Liquid.Converter.Models;
 using Microsoft.Health.Fhir.Liquid.Converter.Models.Hl7v2;
@@ -34,7 +36,9 @@ namespace Microsoft.Health.Fhir.Liquid.Converter.Tool
             var dataProcessor = CreateDataProcessor(dataType);
             var templateProvider = CreateTemplateProvider(dataType, options.TemplateDirectory);
             DefaultProcessorSettings.EnableTelemetryLogger = options.IsVerboseEnabled;
-            DefaultProcessorSettings.AllowOutputValidationErrors = options.AllowOutputValidationErrors;
+            DefaultProcessorSettings.AllowOutputValidationErrors = options.AllowOutputValidationErrors ?? false;
+            DefaultProcessorSettings.Validation.ValidateOutput = options.ValidateOutput ?? false;
+            DefaultProcessorSettings.Validation.FhirCacheDirectory = options.FhirCacheDirectory;
             DefaultProcessorSettings.SerializationFormat = ParseSerializationFormat(options.SerializationFormat);
 
             bool rawOutput = options.RawOutputOnly ?? false;
@@ -81,7 +85,7 @@ namespace Microsoft.Health.Fhir.Liquid.Converter.Tool
                     result = new ConverterResult(ProcessStatus.OK, wrappedJson, traceInfo);
                 }
             }
-            catch (PostprocessException pex) when (DefaultProcessorSettings.AllowOutputValidationErrors) // catch and set a ConverterResult only when AllowOutputValidationErrors==true
+            catch (PostprocessException pex) when (DefaultProcessorSettings.AllowOutputValidationErrors || DefaultProcessorSettings.Validation.ValidateOutput) // catch and set a ConverterResult only when AllowOutputValidationErrors==true
             {
                 result = new ConverterResult(ProcessStatus.OutputValidationError, pex.RawOutputString, traceInfo, pex.Message);
             }
@@ -101,9 +105,17 @@ namespace Microsoft.Health.Fhir.Liquid.Converter.Tool
         private static void ConvertBatchFiles(IFhirConverter dataProcessor, ITemplateProvider templateProvider, DataType dataType, string rootTemplate, string inputFolder, string outputFolder, bool isTraceInfo, bool rawOutputOnly, bool continueOnError)
         {
             var files = GetInputFiles(dataType, inputFolder);
-            foreach (var file in files)
+            var totalCount = files.Count;
+            var logInterval = GetLogInterval(totalCount); // Dynamic log interval depending on number of files
+
+            for (var index = 0; index < totalCount; index++)
             {
-                Console.WriteLine($"Processing {Path.GetFullPath(file)}");
+                var file = files[index];
+                if (ShouldLogProgress(index, totalCount, logInterval))
+                {
+                    Console.WriteLine($"Processing ({index + 1} av {totalCount}) {Path.GetFullPath(file)}");
+                }
+
                 var fileContent = File.ReadAllText(file);
                 var outputFileDirectory = Path.Join(outputFolder, Path.GetRelativePath(inputFolder, Path.GetDirectoryName(file)));
                 var extension = rawOutputOnly ? "." + DefaultProcessorSettings.SerializationFormat.ToString().ToLower() : ".json"; // Only use SerializationFormat as output file format for raw output. Otherwise all formats will be wrapped in json.
@@ -275,6 +287,26 @@ namespace Microsoft.Health.Fhir.Liquid.Converter.Tool
                 "xml" => FhirSerializationFormat.Xml,
                 _ => throw new InputParameterException($"Unsupported serialization format '{format}'. Valid values are: json, xml.")
             };
+        }
+
+        private static int GetLogInterval(int totalCount)
+        {
+            return totalCount switch
+            {
+                < 50 => 1, // Log each if less than 50 files
+                <= 500 => 10, // Log every 10th less than 500 files
+                _ => 100 // else log every 100th
+            };
+        }
+
+        private static bool ShouldLogProgress(int index, int totalCount, int logInterval)
+        {
+            if (index == 0 || index == totalCount - 1)
+            {
+                return true;
+            }
+
+            return (index + 1) % logInterval == 0;
         }
     }
 }

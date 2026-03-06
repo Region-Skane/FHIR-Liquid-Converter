@@ -88,6 +88,15 @@ namespace Microsoft.Health.Fhir.Liquid.Converter {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0}.
+        /// </summary>
+        internal static string InvalidByProfileError {
+            get {
+                return ResourceManager.GetString("InvalidByProfileError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The code mapping file is invalid..
         /// </summary>
         internal static string InvalidCodeMapping {

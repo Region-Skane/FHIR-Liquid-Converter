@@ -1,6 +1,9 @@
-﻿// -------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License (MIT). See LICENSE in the repo root for license information.
+//
+// Copyright (c) Service Well AB.
+// Modifications licensed under the Apache License, Version 2.0. See LICENSE in the repo root.
 // -------------------------------------------------------------------------------------------------
 
 using System;
@@ -18,10 +21,16 @@ namespace Microsoft.Health.Fhir.Liquid.Converter.OutputProcessors
 {
     public static class PostProcessor
     {
-        public static JObject Process(string input, bool allowOutputValidationErrors)
+        public static JObject Process(string input, ProcessorSettings settings)
         {
-            var jsonObject = ParseJson(input, allowOutputValidationErrors);
-            return MergeJson(jsonObject);
+            var jsonObject = ParseJson(input, settings.AllowOutputValidationErrors);
+            var jObject = MergeJson(jsonObject);
+            foreach (var postProcessor in OutputPostProcessorsFactory.Create(settings))
+            {
+                jObject = postProcessor.Process(jObject, settings);
+            }
+
+            return jObject;
         }
 
         public static JObject ParseJson(string input, bool allowOutputValidationErrors)

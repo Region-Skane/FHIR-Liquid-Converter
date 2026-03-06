@@ -1,6 +1,9 @@
-﻿// -------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License (MIT). See LICENSE in the repo root for license information.
+//
+// Copyright (c) Service Well AB.
+// Modifications licensed under the Apache License, Version 2.0. See LICENSE in the repo root.
 // -------------------------------------------------------------------------------------------------
 
 namespace Microsoft.Health.Fhir.Liquid.Converter.Models
@@ -50,5 +53,7 @@ namespace Microsoft.Health.Fhir.Liquid.Converter.Models
         JsonParsingError = 1401,
         JsonMergingError = 1402,
         TraceInfoError = 1403,
+        MissingProfileError = 1404,
+        InvalidByProfileError = 1405,
     }
 }

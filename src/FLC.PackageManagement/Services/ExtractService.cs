@@ -8,11 +8,19 @@ using System.Text.Json;
 using FLC.PackageManagement.Extensions;
 using FLC.PackageManagement.Models;
 using FLC.PackageManagement.Services.Interfaces;
+using Microsoft.Extensions.Logging;
 
 namespace FLC.PackageManagement.Services;
 
 public class ExtractService : IExtractService
 {
+    private readonly ILogger<ExtractService> _logger;
+
+    public ExtractService(ILogger<ExtractService> logger)
+    {
+        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+    }
+
     public async Task<PackageResult> ExtractPackage(Stream stream, string igFoldersRootPath, CancellationToken cancellationToken)
     {
         byte[] streamBuffer = new byte[3];
@@ -92,7 +100,7 @@ public class ExtractService : IExtractService
                     libraryItem = new LibraryItem(
                         root.GetRequiredString("id"),
                         root.GetRequiredString("url"),
-                        root.GetRequiredString("version"),
+                        root.GetOptionalString("version"),
                         null, // StorageRoot will be set later
                         content);
                     break;
@@ -108,7 +116,7 @@ public class ExtractService : IExtractService
                     structureMapItems.Add(new StructureMapItem(
                         root.GetOptionalString("id"),
                         root.GetRequiredString("url"),
-                        root.GetRequiredString("version"),
+                        root.GetOptionalString("version"),
                         root.GetOptionalString("source"),
                         root.GetOptionalString("sourceVersion"),
                         root.GetOptionalString("target"),
@@ -153,11 +161,36 @@ public class ExtractService : IExtractService
                 " - an element with url = 'folder-path' and valueString = '<relative folder path>'\n");
         }
 
+        // Log warning if Library version differs from ImplementationGuide version
+        if (!string.IsNullOrEmpty(libraryItem.Version) && !string.Equals(libraryItem.Version, igItem.Version, StringComparison.OrdinalIgnoreCase))
+        {
+            _logger.LogWarning(
+                "Library '{LibraryId}' has version '{LibraryVersion}' but ImplementationGuide has version '{IGVersion}'. Using ImplementationGuide version.",
+                libraryItem.Id,
+                libraryItem.Version,
+                igItem.Version);
+        }
+
+        // Update Library to use ImplementationGuide version
         libraryItem = LibraryItem.CreateFrom(
             libraryItem,
-            Path.Combine(igFoldersRootPath, igItem.PackageId, igItem.Version, libraryItem.Id, entryTemplateFolder));
+            Path.Combine(igFoldersRootPath, igItem.PackageId, igItem.Version, libraryItem.Id, entryTemplateFolder),
+            igItem.Version);
 
-        structureMapItems = [.. structureMapItems.Select(sm => StructureMapItem.CreateFrom(sm, Path.GetFileNameWithoutExtension(sm.EntryTemplate)))];
+        // Update StructureMap items to use ImplementationGuide version and log warnings for version differences
+        structureMapItems = [.. structureMapItems.Select(sm =>
+        {
+            if (!string.IsNullOrEmpty(sm.Version) && !string.Equals(sm.Version, igItem.Version, StringComparison.OrdinalIgnoreCase))
+            {
+                _logger.LogWarning(
+                    "StructureMap '{StructureMapId}' has version '{StructureMapVersion}' but ImplementationGuide has version '{IGVersion}'. Using ImplementationGuide version.",
+                    sm.Id,
+                    sm.Version,
+                    igItem.Version);
+            }
+
+            return StructureMapItem.CreateFrom(sm, Path.GetFileNameWithoutExtension(sm.EntryTemplate), igItem.Version);
+        })];
 
         return new PackageResult(
             ImplementationGuideItem: igItem,
