@@ -4,9 +4,6 @@
 //
 // Copyright (c) Service Well AB.
 // Modifications licensed under the Apache License, Version 2.0. See LICENSE in the repo root.
-//
-// Copyright (c) Service Well AB.
-// Modifications licensed under the Apache License, Version 2.0. See LICENSE in the repo root.
 // -------------------------------------------------------------------------------------------------
 
 using System;
@@ -108,17 +105,6 @@ namespace Microsoft.Health.Fhir.Liquid.Converter.Tool
         private static void ConvertBatchFiles(IFhirConverter dataProcessor, ITemplateProvider templateProvider, DataType dataType, string rootTemplate, string inputFolder, string outputFolder, bool isTraceInfo, bool rawOutputOnly, bool continueOnError)
         {
             var files = GetInputFiles(dataType, inputFolder);
-            var totalCount = files.Count;
-            var logInterval = GetLogInterval(totalCount); // Dynamic log interval depending on number of files
-
-            for (var index = 0; index < totalCount; index++)
-            {
-                var file = files[index];
-                if (ShouldLogProgress(index, totalCount, logInterval))
-                {
-                    Console.WriteLine($"Processing ({index + 1} av {totalCount}) {Path.GetFullPath(file)}");
-                }
-
             var totalCount = files.Count;
             var logInterval = GetLogInterval(totalCount); // Dynamic log interval depending on number of files
 
@@ -301,26 +287,6 @@ namespace Microsoft.Health.Fhir.Liquid.Converter.Tool
                 "xml" => FhirSerializationFormat.Xml,
                 _ => throw new InputParameterException($"Unsupported serialization format '{format}'. Valid values are: json, xml.")
             };
-        }
-
-        private static int GetLogInterval(int totalCount)
-        {
-            return totalCount switch
-            {
-                < 50 => 1, // Log each if less than 50 files
-                <= 500 => 10, // Log every 10th less than 500 files
-                _ => 100 // else log every 100th
-            };
-        }
-
-        private static bool ShouldLogProgress(int index, int totalCount, int logInterval)
-        {
-            if (index == 0 || index == totalCount - 1)
-            {
-                return true;
-            }
-
-            return (index + 1) % logInterval == 0;
         }
 
         private static int GetLogInterval(int totalCount)
