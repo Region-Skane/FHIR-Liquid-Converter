@@ -32,17 +32,27 @@ namespace Microsoft.Health.Fhir.Liquid.Converter.Tool
             }
 #endif
             var parseResult = Parser.Default.ParseArguments<ConverterOptions, PullTemplateOptions, PushTemplateOptions,
-                PackageManagementOptions, PackageManagementListOptions, FlcConvertOptions>(args);
+                PackageManagementOptions, PackageManagementListOptions, PackageManagementValidateOptions, FlcConvertOptions>(args);
             try
             {
+                int exitCode = 0;
+
                 parseResult.WithParsed<ConverterOptions>(ConverterLogicHandler.Convert);
                 await parseResult.WithParsedAsync<PullTemplateOptions>(TemplateManagementLogicHandler.PullAsync);
                 await parseResult.WithParsedAsync<PushTemplateOptions>(TemplateManagementLogicHandler.PushAsync);
                 await parseResult.WithParsedAsync<PackageManagementOptions>(PackageManagementLogicHandler.ImportPackage);
                 await parseResult.WithParsedAsync<PackageManagementListOptions>(PackageManagementLogicHandler.ListPackages);
+                await parseResult.WithParsedAsync<PackageManagementValidateOptions>(
+                    async options => exitCode = await PackageManagementLogicHandler.ValidatePackage(options));
                 await parseResult.WithParsedAsync<FlcConvertOptions>(FlcConverterLogicHandler.FlcConvert);
                 parseResult.WithNotParsed(HandleOptionsParseError);
-                return 0;
+
+                return exitCode;
+            }
+            catch (PostprocessException ex)
+            {
+                Console.Error.WriteLine($"PostProcess failed: {ex.Message}");
+                return (int)ex.FhirConverterErrorCode;
             }
             catch (PostprocessException ex)
             {

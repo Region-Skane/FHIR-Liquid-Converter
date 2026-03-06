@@ -34,7 +34,13 @@ public class FlcConvertOptions
     public bool IsVerboseEnabled { get; set; }
 
     [Option('a', "AllowOutputValidationErrors", Required = false, HelpText = "Allow output validation errors and return the raw output if validation fails. By default, validation errors will cause the process to fail.")]
-    public bool AllowOutputValidationErrors { get; set; } = false;
+    public bool? AllowOutputValidationErrors { get; set; }
+
+    [Option('u', "ValidateOutput", Required = false, HelpText = "Validate output FHIR resources against their declared profiles. Default is false.")]
+    public bool? ValidateOutput { get; set; }
+
+    [Option('k', "FhirCacheDirectory", Required = false, HelpText = "Directory to use for caching FHIR resources. If not set, the default FHIR cache directory is used.")]
+    public string FhirCacheDirectory { get; set; } = null;
 
     [Option('u', "ValidateOutput", Required = false, HelpText = "Validate output FHIR resources against their declared profiles. Default is false.")]
     public bool ValidateOutput { get; set; } = false;
