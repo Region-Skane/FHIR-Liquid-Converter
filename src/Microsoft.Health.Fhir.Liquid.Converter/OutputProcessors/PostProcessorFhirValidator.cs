@@ -42,7 +42,7 @@ namespace Microsoft.Health.Fhir.Liquid.Converter.OutputProcessors
                     ex);
             }
 
-            ProfileValidator.Validate(fhirResource, settings.Validation.FhirCacheDirectory, input);
+            ProfileValidator.Validate(fhirResource, settings.Validation.FhirCacheDirectory);
 
             return input;
         }

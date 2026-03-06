@@ -51,7 +51,7 @@ namespace Microsoft.Health.Fhir.Liquid.Converter.Models
             /// <summary>
             /// Validate output FHIR resources against their declared profiles. By default, validation is disabled to optimize performance.
             /// </summary>
-            public bool ValidateOutput { get; set; }
+            public bool ValidateOutput { get; set; } = false;
 
             /// <summary>
             /// Directory to use for caching FHIR resources. If not set, the default FHIR cache directory is used.

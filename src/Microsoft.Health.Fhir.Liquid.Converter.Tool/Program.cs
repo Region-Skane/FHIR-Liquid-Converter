@@ -54,6 +54,11 @@ namespace Microsoft.Health.Fhir.Liquid.Converter.Tool
                 Console.Error.WriteLine($"PostProcess failed: {ex.Message}");
                 return (int)ex.FhirConverterErrorCode;
             }
+            catch (PostprocessException ex)
+            {
+                Console.Error.WriteLine($"PostProcess failed: {ex.Message}");
+                return (int)ex.FhirConverterErrorCode;
+            }
             catch (Exception ex)
             {
                 Console.Error.WriteLine($"Process failed: {ex.Message}");
