@@ -49,12 +49,6 @@ namespace Microsoft.Health.Fhir.Liquid.Converter.Tool.Models
         [Option('k', "FhirCacheDirectory", Required = false, HelpText = "Directory to use for caching FHIR resources. If not set, the default FHIR cache directory is used.")]
         public string FhirCacheDirectory { get; set; } = null;
 
-        [Option('u', "ValidateOutput", Required = false, HelpText = "Validate output FHIR resources against their declared profiles. Default is false.")]
-        public bool ValidateOutput { get; set; } = false;
-
-        [Option('k', "FhirCacheDirectory", Required = false, HelpText = "Directory to use for caching FHIR resources. If not set, the default FHIR cache directory is used.")]
-        public string FhirCacheDirectory { get; set; } = null;
-
         [Option('s', "SerializationFormat", Required = false, HelpText = "FHIR serialization format: json or xml. Default is json.")]
         public string SerializationFormat { get; set; } = "json";
 
