@@ -36,8 +36,8 @@ namespace Microsoft.Health.Fhir.Liquid.Converter.Tool
             var dataProcessor = CreateDataProcessor(dataType);
             var templateProvider = CreateTemplateProvider(dataType, options.TemplateDirectory);
             DefaultProcessorSettings.EnableTelemetryLogger = options.IsVerboseEnabled;
-            DefaultProcessorSettings.AllowOutputValidationErrors = options.AllowOutputValidationErrors;
-            DefaultProcessorSettings.Validation.ValidateOutput = options.ValidateOutput;
+            DefaultProcessorSettings.AllowOutputValidationErrors = options.AllowOutputValidationErrors ?? false;
+            DefaultProcessorSettings.Validation.ValidateOutput = options.ValidateOutput ?? false;
             DefaultProcessorSettings.Validation.FhirCacheDirectory = options.FhirCacheDirectory;
             DefaultProcessorSettings.SerializationFormat = ParseSerializationFormat(options.SerializationFormat);
 
@@ -67,6 +67,13 @@ namespace Microsoft.Health.Fhir.Liquid.Converter.Tool
             ConverterResult result = null;
             string rawResultString = null;
 
+            // To make sure that if an error occurs during conversion and
+            // doesn't overwrite the previous successful output, we wont confuse it with a successful conversion.
+            if (File.Exists(outputFile))
+            {
+                File.Delete(outputFile);
+            }
+
             try
             {
                 // We get raw output – can be json or xml
@@ -85,7 +92,7 @@ namespace Microsoft.Health.Fhir.Liquid.Converter.Tool
                     result = new ConverterResult(ProcessStatus.OK, wrappedJson, traceInfo);
                 }
             }
-            catch (PostprocessException pex) when (DefaultProcessorSettings.AllowOutputValidationErrors) // catch and set a ConverterResult only when AllowOutputValidationErrors==true
+            catch (PostprocessException pex) when (DefaultProcessorSettings.AllowOutputValidationErrors || DefaultProcessorSettings.Validation.ValidateOutput) // catch and set a ConverterResult only when AllowOutputValidationErrors==true
             {
                 result = new ConverterResult(ProcessStatus.OutputValidationError, pex.RawOutputString, traceInfo, pex.Message);
             }

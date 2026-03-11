@@ -25,8 +25,8 @@ public record LibraryItem(
     string StorageRoot,
     string Json)
 {
-    public static LibraryItem CreateFrom(LibraryItem src, string storageRoot)
-        => src with { StorageRoot = storageRoot };
+    public static LibraryItem CreateFrom(LibraryItem src, string storageRoot, string version)
+        => src with { StorageRoot = storageRoot, Version = version };
 };
 
 public record StructureMapItem(
@@ -40,8 +40,8 @@ public record StructureMapItem(
     string EntryTemplate,
     string Json)
 {
-    public static StructureMapItem CreateFrom(StructureMapItem src, string entryTemplate)
-        => src with { EntryTemplate = entryTemplate };
+    public static StructureMapItem CreateFrom(StructureMapItem src, string entryTemplate, string version)
+        => src with { EntryTemplate = entryTemplate, Version = version };
 };
 
 #pragma warning restore SA1313

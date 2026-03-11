@@ -5,6 +5,7 @@
 
 using System;
 using System.Collections.Concurrent;
+using System.IO;
 using System.Linq;
 using Firely.Fhir.Packages;
 using Hl7.Fhir.Specification.Source;
@@ -12,6 +13,8 @@ using Hl7.Fhir.Specification.Terminology;
 using Hl7.Fhir.Validation;
 using Microsoft.Health.Fhir.Liquid.Converter.Exceptions;
 using Microsoft.Health.Fhir.Liquid.Converter.Models;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using FhirModel = Hl7.Fhir.Model;
 
 namespace Microsoft.Health.Fhir.Liquid.Converter.Validators;
@@ -32,6 +35,7 @@ public static class ProfileValidator
     /// </summary>
     /// <param name="resource">The FHIR resource or bundle to validate against its declared profiles</param>
     /// <param name="fhirCacheDirectory">The directory path to the FHIR cache. If null, the default FHIR package root is used.</param>
+    /// <param name="original">The original JObject representation of the resource, used for error reporting in case of validation failure</param>
     /// <exception cref="ArgumentNullException">Thrown when the resource parameter is null</exception>
     /// <exception cref="PostprocessException">Thrown when the resource does not contain a Meta.Profile declaration or fails validation against its declared profiles</exception>
     /// <remarks>
@@ -39,21 +43,28 @@ public static class ProfileValidator
     /// Subsequent calls benefit from caching and typically complete in 10-400ms depending on resource complexity.
     /// For Bundles, each entry is validated individually, and validation errors include the entry index for easier debugging.
     /// </remarks>
-    public static void Validate(FhirModel.Resource resource, string fhirCacheDirectory = null)
+    public static void Validate(FhirModel.Resource resource, string fhirCacheDirectory = null, JObject original = null)
     {
-        ArgumentNullException.ThrowIfNull(resource, nameof(resource));
+        ArgumentNullException.ThrowIfNull(resource);
 
-        var cacheKey = fhirCacheDirectory ?? Platform.GetFhirPackageRoot();
+        var cacheKey = string.IsNullOrWhiteSpace(fhirCacheDirectory)
+            ? Platform.GetFhirPackageRoot()
+            : fhirCacheDirectory;
+
+        if (!Directory.Exists(cacheKey))
+        {
+            throw new DirectoryNotFoundException($"The specified FHIR cache directory does not exist: {cacheKey}");
+        }
 
         var validator = _validatorCache.GetOrAdd(cacheKey, CreateValidator);
 
         if (resource is FhirModel.Bundle bundle)
         {
-            ValidateBundle(validator, bundle);
+            ValidateBundle(validator, bundle, original);
             return;
         }
 
-        ValidateSingleResource(validator, resource);
+        ValidateSingleResource(validator, resource, original);
     }
 
     /// <summary>
@@ -87,13 +98,14 @@ public static class ProfileValidator
     /// </summary>
     /// <param name="validator">The FHIR validator to use for validation</param>
     /// <param name="bundle">The FHIR Bundle to validate</param>
+    /// <param name="original">The original JObject representation of the bundle, used for error reporting in case of validation failure</param>
     /// <exception cref="PostprocessException">Thrown when bundle validation fails or when an entry fails validation.</exception>
-    private static void ValidateBundle(Validator validator, FhirModel.Bundle bundle)
+    private static void ValidateBundle(Validator validator, FhirModel.Bundle bundle, JObject original)
     {
         // Validate the bundle itself if it has a profile
         if (bundle.Meta?.Profile?.Any() ?? false)
         {
-            ValidateSingleResource(validator, bundle);
+            ValidateSingleResource(validator, bundle, original);
             return;
         }
 
@@ -113,11 +125,15 @@ public static class ProfileValidator
 
             try
             {
-                ValidateSingleResource(validator, entry.Resource);
+                ValidateSingleResource(validator, entry.Resource, original);
             }
             catch (PostprocessException ex)
             {
-                throw new PostprocessException(ex.FhirConverterErrorCode, $"Validation failed for bundle entry {i}: {ex.Message}", ex);
+                throw new PostprocessException(
+                    ex.FhirConverterErrorCode,
+                    $"Validation failed for bundle entry {i}: {ex.Message}",
+                    original?.ToString(Formatting.Indented) ?? string.Empty,
+                    ex);
             }
         }
     }
@@ -126,25 +142,29 @@ public static class ProfileValidator
     /// Validates a single FHIR resource against its declared profiles.
     /// </summary>
     /// <param name="validator">The FHIR validator to use for validation</param>
-    /// <param name="resource">The FHIR resource to validate</param>
+    /// <param name="resourceToValidate">The FHIR resource to validate</param>
+    /// <param name="original">The original JObject representation of the resource, used for error reporting in case of validation failure</param>
     /// <exception cref="PostprocessException">Thrown when the resource does not contain a Meta.Profile declaration or fails validation against its declared profiles</exception>
-    private static void ValidateSingleResource(Validator validator, FhirModel.Resource resource)
+    private static void ValidateSingleResource(Validator validator, FhirModel.Resource resourceToValidate, JObject original)
     {
-        if ((resource.Meta?.Profile?.Any() ?? false) == false)
+        if ((resourceToValidate.Meta?.Profile?.Any() ?? false) == false)
         {
-            Console.Error.WriteLine($"Warning: Skipping validation for {resource.TypeName} resource (id: {resource.Id ?? "unknown"}) - no Meta.Profile declaration found.");
+            Console.Error.WriteLine($"Warning: Skipping validation for {resourceToValidate.TypeName} resource (id: {resourceToValidate.Id ?? "unknown"}) - no Meta.Profile declaration found.");
             return;
         }
 
         // If there is no warm up beforehand then this is the only method that typically takes around 2.5 seconds due to the initialization
         // of the validator and loading of profiles. After the first call,
         // the validator is cached and subsequent calls are much faster (10-400ms depending on resource complexity).
-        var result = validator.Validate(resource);
+        var result = validator.Validate(resourceToValidate);
         if (result.Success)
         {
             return;
         }
 
-        throw new PostprocessException(FhirConverterErrorCode.InvalidByProfileError, string.Format(Resources.InvalidByProfileError, result.ToString()));
+        throw new PostprocessException(
+            FhirConverterErrorCode.InvalidByProfileError,
+            string.Format(Resources.InvalidByProfileError, result.ToString()),
+            original?.ToString(Formatting.Indented) ?? string.Empty);
     }
 }
