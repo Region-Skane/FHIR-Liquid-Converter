@@ -5,6 +5,7 @@
 
 using System;
 using System.Collections.Concurrent;
+using System.IO;
 using System.Linq;
 using Firely.Fhir.Packages;
 using Hl7.Fhir.Specification.Source;
@@ -46,7 +47,14 @@ public static class ProfileValidator
     {
         ArgumentNullException.ThrowIfNull(resource);
 
-        var cacheKey = fhirCacheDirectory ?? Platform.GetFhirPackageRoot();
+        var cacheKey = string.IsNullOrWhiteSpace(fhirCacheDirectory)
+            ? Platform.GetFhirPackageRoot()
+            : fhirCacheDirectory;
+
+        if (!Directory.Exists(cacheKey))
+        {
+            throw new DirectoryNotFoundException($"The specified FHIR cache directory does not exist: {cacheKey}");
+        }
 
         var validator = _validatorCache.GetOrAdd(cacheKey, CreateValidator);
 

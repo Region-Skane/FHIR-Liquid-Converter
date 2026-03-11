@@ -67,6 +67,13 @@ namespace Microsoft.Health.Fhir.Liquid.Converter.Tool
             ConverterResult result = null;
             string rawResultString = null;
 
+            // To make sure that if an error occurs during conversion and
+            // doesn't overwrite the previous successful output, we wont confuse it with a successful conversion.
+            if (File.Exists(outputFile))
+            {
+                File.Delete(outputFile);
+            }
+
             try
             {
                 // We get raw output – can be json or xml
