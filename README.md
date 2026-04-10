@@ -5,6 +5,14 @@ with extended support for terminology translation and FHIR Implementation Guides
 
 ---
 
+### Region Skåne-dokumentation
+
+Region Skånes dokumentation och källkod finns i deras fork av FHIR Liquid Converter.  
+Den här sektionen är en snabb genväg till Region Skånes egna dokumentation.
+[Region Skånes dokumentation](docs/skane/toc.md)
+
+---
+
 ## License
 
 This project is licensed under the Apache License, Version 2.0.  

@@ -5,6 +5,7 @@
 using System.Collections.Generic;
 using Hl7.Fhir.Serialization;
 using Microsoft.Health.Fhir.Liquid.Converter.Extensions;
+using Newtonsoft.Json.Linq;
 
 namespace Microsoft.Health.Fhir.Liquid.Converter
 {
@@ -13,6 +14,8 @@ namespace Microsoft.Health.Fhir.Liquid.Converter
     /// </summary>
     public partial class FlcFilters
     {
+        private static readonly FhirJsonSerializer _serializer = new ();
+
         public static IDictionary<string, object> FhirTerminologyClient(string fhirServer, string fhirRequest, params object[] parameters)
         {
             for (int i = 0; i < parameters?.Length; i++)
@@ -29,8 +32,8 @@ namespace Microsoft.Health.Fhir.Liquid.Converter
             // https://r4.ontoserver.csiro.au/fhir
             var client = new Hl7.Fhir.Rest.FhirClient(fhirServer);
 
-            var response = client.Get(fhirRequest);
-            var jsonObject = response.ToJObject();
+            var response = client.GetAsync(fhirRequest).GetAwaiter().GetResult();
+            var jsonObject = JObject.Parse(_serializer.SerializeToString(response));
 
             // Omvandla till en Dictionary och returnera
             return jsonObject.ToObject() as Dictionary<string, object> ?? new Dictionary<string, object>(); // uses the ToObject extension

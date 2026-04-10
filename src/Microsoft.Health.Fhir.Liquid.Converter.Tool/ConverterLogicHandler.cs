@@ -92,7 +92,7 @@ namespace Microsoft.Health.Fhir.Liquid.Converter.Tool
                     result = new ConverterResult(ProcessStatus.OK, wrappedJson, traceInfo);
                 }
             }
-            catch (PostprocessException pex) when (DefaultProcessorSettings.AllowOutputValidationErrors || DefaultProcessorSettings.Validation.ValidateOutput) // catch and set a ConverterResult only when AllowOutputValidationErrors==true
+            catch (PostprocessException pex) when (DefaultProcessorSettings.AllowOutputValidationErrors) // catch and set a ConverterResult only when AllowOutputValidationErrors==true
             {
                 result = new ConverterResult(ProcessStatus.OutputValidationError, pex.RawOutputString, traceInfo, pex.Message);
             }

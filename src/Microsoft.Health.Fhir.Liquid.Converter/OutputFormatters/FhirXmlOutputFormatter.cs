@@ -11,25 +11,20 @@ namespace Microsoft.Health.Fhir.Liquid.Converter.OutputFormatters;
 
 public class FhirXmlOutputFormatter : IOutputFormatter
 {
-    private static readonly ParserSettings _parserSettings = new ()
+    private static readonly DeserializerSettings _parserSettings = new ()
     {
         AcceptUnknownMembers = true,
         AllowUnrecognizedEnums = true,
     };
 
-    private static readonly FhirJsonParser _parser = new (_parserSettings);
+    private static readonly FhirJsonDeserializer _parser = new (_parserSettings);
 
-    private static readonly SerializerSettings _serializerSettings = new SerializerSettings
-    {
-        Pretty = true,
-    };
-
-    private static readonly FhirXmlSerializer _serializer = new (_serializerSettings);
+    private static readonly FhirXmlSerializer _serializer = new ();
 
     public string Format(JObject cleanedJson)
     {
         var json = cleanedJson.ToString();
-        var resource = _parser.Parse<Resource>(json);
-        return _serializer.SerializeToString(resource);
+        var resource = _parser.Deserialize<Resource>(json);
+        return _serializer.SerializeToString(resource, pretty: true);
     }
 }

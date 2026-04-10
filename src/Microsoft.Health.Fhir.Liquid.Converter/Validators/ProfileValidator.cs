@@ -8,9 +8,9 @@ using System.Collections.Concurrent;
 using System.IO;
 using System.Linq;
 using Firely.Fhir.Packages;
+using Firely.Fhir.Validation;
 using Hl7.Fhir.Specification.Source;
 using Hl7.Fhir.Specification.Terminology;
-using Hl7.Fhir.Validation;
 using Microsoft.Health.Fhir.Liquid.Converter.Exceptions;
 using Microsoft.Health.Fhir.Liquid.Converter.Models;
 using Newtonsoft.Json;
@@ -25,7 +25,7 @@ namespace Microsoft.Health.Fhir.Liquid.Converter.Validators;
 /// </summary>
 public static class ProfileValidator
 {
-    private static readonly ConcurrentDictionary<string, Validator> _validatorCache = new ();
+    private static readonly ConcurrentDictionary<string, Validator> _validatorCache = new();
 
     /// <summary>
     /// Validates that a FHIR resource conforms to its declared profiles.
@@ -85,11 +85,7 @@ public static class ProfileValidator
         var source = new DirectorySource(directory, sourceSettings);
         var resolver = new CachedResolver(new SnapshotSource(source));
 
-        var settings = ValidationSettings.CreateDefault();
-        settings.ResourceResolver = resolver;
-        settings.TerminologyService = new LocalTerminologyService(resolver);
-
-        return new Validator(settings);
+        return new Validator(resolver, new LocalTerminologyService(resolver));
     }
 
     /// <summary>
